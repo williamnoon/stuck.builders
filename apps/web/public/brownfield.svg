@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" role="img" aria-label="Brownfield — an existing partial structure standing in a brown field">
+  <defs>
+    <pattern id="bf-grain" width="4" height="4" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.4" fill="#7A4E0C" fill-opacity="0.22" />
+    </pattern>
+  </defs>
+  <path d="M8,86 Q100,78 194,86 L194,110 L8,110 Z" fill="#A56A11" fill-opacity="0.16" />
+  <path d="M8,86 Q100,78 194,86" stroke="#A56A11" stroke-width="1.8" stroke-dasharray="3 4" fill="none" />
+  <rect x="0" y="86" width="200" height="24" fill="url(#bf-grain)" />
+  <path d="M56,86 L56,54 L98,54 L98,86" stroke="#A56A11" stroke-width="2.2" fill="none" stroke-linecap="round" />
+  <path d="M56,86 L56,64 L78,64 L78,86 Z" fill="#A56A11" fill-opacity="0.42" />
+  <path d="M56,64 L98,64 M56,54 L98,54" stroke="#A56A11" stroke-width="1.4" />
+  <path d="M110,86 L110,46 M122,86 L122,46 M110,66 L122,66" stroke="#7A4E0C" stroke-width="1.6" stroke-linecap="round" />
+  <path d="M108,44 L124,50 M108,50 L124,44" stroke="#7A4E0C" stroke-width="1.2" />
+  <path d="M132,86 L132,72 L146,72" stroke="#A56A11" stroke-width="1.6" fill="none" stroke-linecap="round" />
+  <circle cx="140" cy="82" r="2.5" fill="#7A4E0C" fill-opacity="0.5" />
+  <circle cx="150" cy="82" r="2.5" fill="#7A4E0C" fill-opacity="0.5" />
+</svg>

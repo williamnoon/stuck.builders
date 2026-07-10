@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" role="img" aria-label="Greenfield — an empty green field with a small sapling being planted">
+  <defs>
+    <pattern id="gf-grain" width="4" height="4" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.4" fill="#0E6E3B" fill-opacity="0.18" />
+    </pattern>
+  </defs>
+  <path d="M8,82 Q100,66 194,82 L194,110 L8,110 Z" fill="#128A4B" fill-opacity="0.14" />
+  <path d="M8,82 Q100,66 194,82" stroke="#128A4B" stroke-width="1.8" stroke-dasharray="3 4" fill="none" />
+  <rect x="0" y="82" width="200" height="28" fill="url(#gf-grain)" />
+  <path d="M100,82 L100,52" stroke="#0E6E3B" stroke-width="2.4" stroke-linecap="round" />
+  <path d="M100,52 Q90,42 100,36 Q110,42 100,52 Z" fill="#128A4B" />
+  <path d="M100,60 Q88,54 88,50" stroke="#0E6E3B" stroke-width="1.6" fill="none" stroke-linecap="round" />
+  <path d="M100,64 Q112,58 112,54" stroke="#0E6E3B" stroke-width="1.6" fill="none" stroke-linecap="round" />
+  <circle cx="158" cy="26" r="9" fill="#A56A11" fill-opacity="0.42" />
+  <path d="M158,10 L158,6 M158,42 L158,46 M142,26 L138,26 M174,26 L178,26 M148,16 L145,13 M168,36 L171,39 M168,16 L171,13 M148,36 L145,39" stroke="#A56A11" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.6" />
+</svg>

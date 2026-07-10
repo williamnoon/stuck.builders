@@ -1,0 +1,12 @@
+node_modules
+.next
+.turbo
+.vercel
+.env
+.env.local
+.DS_Store
+*.log
+*.tsbuildinfo
+dist
+build
+.playwright-mcp
