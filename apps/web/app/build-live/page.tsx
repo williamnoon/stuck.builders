@@ -190,10 +190,9 @@ export default function BuildLivePage() {
                   <span className="dim">Private rooftop.</span>
                 </h3>
                 <p style={{ color: "var(--gray)", fontSize: 14, marginBottom: 12 }}>
-                  A room built to help you ship — not to look at. Extra-large monitor so we can pair
-                  on-screen. Gigabit wi-fi so the install works first try. A{" "}
-                  <strong style={{ color: "var(--white)" }}>private rooftop putting green</strong> so your
-                  1-hour lunch is a real break — not a laptop-in-a-cafe.
+                  Extra-large monitor so we can pair on-screen. Gigabit wi-fi so the install works first
+                  try. A <strong style={{ color: "var(--white)" }}>private rooftop putting green</strong>{" "}
+                  so your 1-hour lunch is a real break — not a laptop-in-a-cafe.
                 </p>
                 <ul className="venue-list">
                   <li>◆ Private rooftop · putting green</li>
