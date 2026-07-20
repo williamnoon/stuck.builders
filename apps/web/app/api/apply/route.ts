@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { sprintKindLabel, type SprintKind } from "@/lib/config";
 
+type ApplyVariant = "build-b" | "build-live" | "legacy";
+
 type ApplyPayload = {
   sprintKind: SprintKind;
   q1Label: string;
   q1Price: string;
+  variant: ApplyVariant;
   projectText: string;
   projectUrl: string;
   aboutYou: string;
@@ -18,12 +21,23 @@ type ApplyPayload = {
   utm?: Record<string, string>;
 };
 
+const VARIANT_LABEL: Record<ApplyVariant, string> = {
+  "build-b": "The Build (virtual · 4hr · $1,995 launch / $2,995 regular)",
+  "build-live": "The Build LIVE (Fri Sep 11 2026 · Bridgeview Room, Charleston SC · $1,995 launch / $5,995 regular)",
+  legacy: "Legacy Sprint (Greenfield / Brownfield)",
+};
+
 function isString(v: unknown): v is string {
   return typeof v === "string";
 }
 
 function isSprintKind(v: unknown): v is SprintKind {
   return v === "idea" || v === "build";
+}
+
+function normalizeVariant(v: unknown): ApplyVariant {
+  if (v === "build-b" || v === "build-live") return v;
+  return "legacy";
 }
 
 function parsePayload(body: unknown): ApplyPayload | null {
@@ -63,6 +77,7 @@ function parsePayload(body: unknown): ApplyPayload | null {
     sprintKind: b.sprintKind,
     q1Label: b.q1Label,
     q1Price: b.q1Price,
+    variant: normalizeVariant(b.variant),
     projectText,
     projectUrl,
     aboutYou,
@@ -87,7 +102,8 @@ function escapeHtml(s: string): string {
 
 function buildHtml(p: ApplyPayload, submittedAt: string): string {
   const rows: Array<[string, string]> = [
-    ["Q1 — Where are you?", `${p.q1Label} (${p.q1Price})`],
+    ["Offer applied for", VARIANT_LABEL[p.variant]],
+    ["Q1 — Where are you? (legacy)", `${p.q1Label} (${p.q1Price})`],
     ["Q2 — Project description", p.projectText || "(none)"],
     ["Q2 — Project link", p.projectUrl || "(none)"],
   ];
@@ -126,7 +142,7 @@ function buildHtml(p: ApplyPayload, submittedAt: string): string {
 
   return `<!doctype html>
 <html><body style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#111;">
-  <h2 style="margin:0 0 12px;">New application — ${escapeHtml(sprintKindLabel(p.sprintKind))}</h2>
+  <h2 style="margin:0 0 12px;">New application — ${escapeHtml(VARIANT_LABEL[p.variant])}</h2>
   <p style="margin:0 0 16px;color:#555;">${escapeHtml(p.name)} &lt;${escapeHtml(p.email)}&gt;</p>
   <table style="border-collapse:collapse;width:100%;max-width:720px;">${body}</table>
 </body></html>`;
@@ -149,7 +165,7 @@ export async function POST(req: Request) {
   }
 
   const submittedAt = new Date().toISOString();
-  const subject = `[stuck.builders] New application — ${payload.name} — ${sprintKindLabel(payload.sprintKind)}`;
+  const subject = `[stuck.builders] New application — ${payload.name} — ${VARIANT_LABEL[payload.variant]}`;
   const html = buildHtml(payload, submittedAt);
 
   const apiKey = process.env.RESEND_API_KEY;

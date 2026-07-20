@@ -41,11 +41,16 @@ function readCookie(name: string): string {
   return match ? decodeURIComponent(match.split("=")[1] ?? "") : "";
 }
 
+type ApplyVariant = "build-b" | "build-live" | "legacy";
+
 export function ApplicationForm({
   defaultKind = "build",
+  variant = "legacy",
 }: {
   defaultKind?: SprintKind;
+  variant?: ApplyVariant;
 }) {
+  const isNewOffer = variant === "build-b" || variant === "build-live";
   const router = useRouter();
 
   const initialIndex = defaultKind === "idea" ? 0 : 1;
@@ -125,6 +130,7 @@ export function ApplicationForm({
       sprintKind: kind,
       q1Label: q1.label,
       q1Price: q1.price,
+      variant,
       projectText: projectText.trim(),
       projectUrl: projectUrl.trim(),
       aboutYou: isIdeaPath ? aboutYou.trim() : "",
@@ -165,30 +171,64 @@ export function ApplicationForm({
 
   return (
     <form onSubmit={onSubmit} noValidate>
-      {/* Q1 */}
-      <div className="field">
-        <label>Q1 — Where are you right now?</label>
-        <p className="help">
-          Pick the one that fits. This routes you to the right sprint and the right price.
-        </p>
-        <div className="radio-group">
-          {Q1_OPTIONS.map((opt, idx) => (
-            <label key={idx}>
-              <input
-                type="radio"
-                name="q1"
-                checked={q1Index === idx}
-                onChange={() => setQ1Index(idx)}
-              />
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <span>{opt.label}</span>
-                <span className="help" style={{ margin: 0 }}>{opt.help}</span>
-              </div>
-              <span className="price-tag">{opt.price}</span>
-            </label>
-          ))}
+      {/* Q1 — legacy Idea/Build split; hidden for the new /build-b + /build-live variants */}
+      {!isNewOffer && (
+        <div className="field">
+          <label>Q1 — Where are you right now?</label>
+          <p className="help">
+            Pick the one that fits. This routes you to the right sprint and the right price.
+          </p>
+          <div className="radio-group">
+            {Q1_OPTIONS.map((opt, idx) => (
+              <label key={idx}>
+                <input
+                  type="radio"
+                  name="q1"
+                  checked={q1Index === idx}
+                  onChange={() => setQ1Index(idx)}
+                />
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <span>{opt.label}</span>
+                  <span className="help" style={{ margin: 0 }}>{opt.help}</span>
+                </div>
+                <span className="price-tag">{opt.price}</span>
+              </label>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {isNewOffer && (
+        <div className="field">
+          <label>You&apos;re applying for:</label>
+          <div
+            style={{
+              padding: 16,
+              border: "1px solid var(--line)",
+              background: "var(--green-dim)",
+              borderRadius: 4,
+              fontSize: 14,
+            }}
+          >
+            {variant === "build-b" ? (
+              <>
+                <strong>The Build</strong> — live · virtual · 4 hours · 1:1 with Will<br />
+                <span style={{ color: "var(--gray)" }}>
+                  $1,995 limited-time launch · regular $2,995
+                </span>
+              </>
+            ) : (
+              <>
+                <strong>The Build — LIVE</strong> — in-person · Fri Sep 11, 2026 · Bridgeview Room,
+                Charleston Digital, Charleston SC<br />
+                <span style={{ color: "var(--gray)" }}>
+                  $1,995 launch (first 10 seats) · then $5,995
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {refCode && (
         <div className="field">
@@ -299,9 +339,8 @@ export function ApplicationForm({
             onChange={(e) => setAck(e.target.checked)}
           />
           <span>
-            My project is legal, not harmful, and not predatory. I get that
-            slots are capped at 5/week and Will reads every application himself
-            before anyone pays.
+            My project is legal, not harmful, and not predatory. I get that Will
+            reads every application himself before anyone pays.
           </span>
         </label>
       </div>
@@ -315,7 +354,9 @@ export function ApplicationForm({
       </div>
 
       <p className="form-hint">
-        Reply in ~5 min. Accepted: Stripe link + Day 1 booking. Slot locks on payment.
+        {isNewOffer
+          ? "Reply fast. Accepted: my AI does the onboarding call, Will jumps on to close, seat locks on a Square or Cash App link."
+          : "Reply in ~5 min. Accepted: Stripe link + Day 1 booking. Slot locks on payment."}
       </p>
     </form>
   );
