@@ -1,45 +1,137 @@
 import type { Metadata } from "next";
 import { TopBar } from "@/components/TopBar";
 import { Footer } from "@/components/Footer";
-import { sprintKindLabel, type SprintKind } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "You're in the queue | Stuck to Shipped",
+  title: "Application in — talk soon | Stuck.builders",
   description:
-    "Application received. Will reads applications live — replies usually in about 5 minutes, accepted or not.",
+    "Application received. Will reads every one himself. Expect a short call to lock your seat.",
 };
 
-type SearchParams = Promise<{ kind?: string }>;
+type Variant = "build-b" | "build-live" | "legacy";
+type SearchParams = Promise<{ kind?: string; variant?: string }>;
+
+function normalizeVariant(v: string | undefined): Variant {
+  if (v === "build-b" || v === "build-live") return v;
+  return "legacy";
+}
+
+const VARIANT_CONFIG: Record<Variant, {
+  eyebrow: string;
+  h1: React.ReactNode;
+  sub: React.ReactNode;
+  hand: string;
+  backHref: string;
+  backLabel: string;
+}> = {
+  "build-b": {
+    eyebrow: "// APPLICATION IN — THE BUILD",
+    h1: (
+      <>
+        Got it.<br />Talk soon.
+      </>
+    ),
+    sub: (
+      <>
+        You applied for <strong>The Build</strong> — live · virtual · 4 hours · 1:1 with Will.{" "}
+        <strong>$1,995 launch (regular $2,995).</strong>
+        <br />
+        <br />
+        <strong>Next:</strong> Will reads your application himself. If it&apos;s a fit, we call to
+        scope your build and lock the day that works for you. If it&apos;s not, you get an honest
+        reply — no ghosting.
+      </>
+    ),
+    hand: "watch your phone + inbox — reply comes from will@stuck.builders.",
+    backHref: "/build-b",
+    backLabel: "← back to The Build",
+  },
+  "build-live": {
+    eyebrow: "// APPLICATION IN — THE BUILD LIVE · SEP 11, 2026 · CHARLESTON",
+    h1: (
+      <>
+        Got it.<br />Save the date.
+      </>
+    ),
+    sub: (
+      <>
+        You applied for <strong>The Build — LIVE</strong> — in-person, Fri Sep 11, 2026, Bridgeview
+        Room at Charleston Digital. <strong>$1,995 launch (first 10 seats) · then $5,995.</strong>
+        <br />
+        <br />
+        <strong>Next:</strong> Will reads your application himself. If it&apos;s a fit, we call to
+        scope your build and get the seat locked with a Square or Cash App link. If it&apos;s not,
+        you get an honest reply — no ghosting.
+        <br />
+        <br />
+        <strong>Meanwhile:</strong> block <strong>Fri Sep 11, 2026, 9am–3pm</strong> in your calendar
+        so the day&apos;s held once we confirm.
+      </>
+    ),
+    hand: "watch your phone + inbox — reply comes from will@stuck.builders.",
+    backHref: "/build-live",
+    backLabel: "← back to The Build LIVE",
+  },
+  legacy: {
+    eyebrow: "// APPLICATION IN",
+    h1: (
+      <>
+        Got it.<br />Reply in<br />~5 minutes.
+      </>
+    ),
+    sub: <>Will reads live. Accepted: payment link + first session booked. Not a fit: honest reply.</>,
+    hand: "watch your inbox — the reply comes from will@stuck.builders.",
+    backHref: "/",
+    backLabel: "← back to stuck.builders",
+  },
+};
 
 export default async function ThanksPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
-  const kind: SprintKind = params.kind === "idea" ? "idea" : "build";
-  const priceLabel = sprintKindLabel(kind);
-  const backHref = kind === "idea" ? "/greenfield" : "/brownfield";
+  const variant = normalizeVariant(params.variant);
+  const cfg = VARIANT_CONFIG[variant];
 
   return (
     <>
       <TopBar />
       <main id="top">
         <div className="hero wrap">
-          <p className="eyebrow">// IN THE QUEUE</p>
+          <p className="eyebrow">{cfg.eyebrow}</p>
           <h1 className="display" style={{ fontSize: "clamp(44px, 8vw, 96px)" }}>
-            Got it.<br />Reply in<br />~5 minutes.
+            {cfg.h1}
           </h1>
 
-          <p className="sub">
-            {priceLabel}. Will reads live. Accepted: Stripe link + Cal.com booking. Not a fit: honest reply.
-          </p>
+          <p className="sub" style={{ marginTop: 30 }}>{cfg.sub}</p>
 
           <div className="signoff">
-            <span className="hand">
-              watch your inbox — the reply comes from will@stuck.builders.
-            </span>
+            <span className="hand">{cfg.hand}</span>
           </div>
 
-          <p style={{ marginTop: 20, fontSize: 13, color: "var(--gray)" }}>
-            <a href={backHref} style={{ borderBottom: "1px dashed var(--green)" }}>
-              ← back to stuck.builders
+          {variant === "build-live" && (
+            <div
+              style={{
+                margin: "24px auto 0",
+                maxWidth: 620,
+                padding: "18px 22px",
+                background: "var(--panel)",
+                border: "1px solid var(--line)",
+                borderLeft: "4px solid var(--chalk)",
+                borderRadius: 6,
+                textAlign: "left",
+                fontSize: 14,
+                color: "var(--gray)",
+              }}
+            >
+              <strong style={{ color: "var(--white)" }}>Bridgeview Conference Room</strong> ·
+              Charleston Digital · top floor of the Charleston Tech Center, downtown Charleston SC.
+              Floor-to-ceiling glass, Ravenel Bridge view, private rooftop putting green, catered
+              Mediterranean pita bar lunch. Doors 9am, we&apos;re building by 9:15.
+            </div>
+          )}
+
+          <p style={{ marginTop: 24, fontSize: 13, color: "var(--gray)" }}>
+            <a href={cfg.backHref} style={{ borderBottom: "1px dashed var(--green)" }}>
+              {cfg.backLabel}
             </a>
           </p>
         </div>
