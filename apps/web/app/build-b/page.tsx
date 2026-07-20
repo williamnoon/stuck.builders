@@ -75,10 +75,6 @@ export default function BuildBPage() {
       <main id="top">
         {/* HERO */}
         <div className="hero wrap">
-          <p className="eyebrow">
-            // THE BUILD — live · virtual · 4 hours · 1:1 with Will ·{" "}
-            <span className="ok">1 seat a day · 5 days a week · 2 open this week</span>
-          </p>
           <h1 className="display">
             <span className="stuck">
               Stuck in your head
