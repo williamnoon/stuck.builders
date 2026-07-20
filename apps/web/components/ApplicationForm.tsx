@@ -123,6 +123,7 @@ export function ApplicationForm({
   const [shipped, setShipped] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [ack, setAck] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -160,6 +161,13 @@ export function ApplicationForm({
     if (!email.trim()) return "Need your email — that's where the reply goes.";
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
     if (!emailOk) return "That email looks off — double-check it.";
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (isNewOffer && phoneDigits.length < 7) {
+      return "Need a phone number — that's where the onboarding call comes in.";
+    }
+    if (phone.trim() && phoneDigits.length < 7) {
+      return "That phone number looks short — double-check it.";
+    }
     if (projectUrl.trim()) {
       try {
         const candidate = projectUrl.trim().startsWith("http")
@@ -204,6 +212,7 @@ export function ApplicationForm({
       shipped: shipped.trim(),
       name: name.trim(),
       email: email.trim(),
+      phone: phone.trim(),
       ack,
       refCode: refCode || undefined,
       utm: Object.keys(utm).length ? utm : undefined,
@@ -389,6 +398,25 @@ export function ApplicationForm({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"
+        />
+      </div>
+
+      <div className="field">
+        <label htmlFor="phone">
+          Your phone{isNewOffer ? "" : " (optional)"}
+        </label>
+        <p className="help">
+          {isNewOffer
+            ? "Where the onboarding call lands. US format fine, international fine — just make sure it rings."
+            : "Optional — but faster than email if we need to close the loop."}
+        </p>
+        <input
+          id="phone"
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          autoComplete="tel"
+          placeholder="(555) 123-4567"
         />
       </div>
 

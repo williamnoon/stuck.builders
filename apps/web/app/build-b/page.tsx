@@ -150,37 +150,37 @@ export default function BuildBPage() {
         <section className="board">
           <div className="wrap">
             <div className="board-title">
-              <span className="hand">this week · 1 seat a day · Mon–Fri</span>
+              <span className="hand">next week · 1 seat a day · Mon–Fri</span>
             </div>
             <div className="board-frame">
               <span className="tape tl" />
               <span className="tape tr" />
               <div className="board-head">
-                <span>// THIS WEEK&apos;S SEATS</span>
+                <span>// NEXT WEEK&apos;S SEATS</span>
                 <span>
-                  <span className="live">● live</span> — booking today
+                  <span className="full">● this week: full</span> · booking next week now
                 </span>
               </div>
               <div className="week">
                 <div className="week-label">
                   <span className="week-name">
-                    THIS WEEK <span className="dim">— one 4-hour build per day, 1:1</span>
+                    NEXT WEEK <span className="dim">— one 4-hour build per day, 1:1</span>
                   </span>
-                  <span className="week-tag tag-open">2 OPEN · 3 FILLED</span>
+                  <span className="week-tag tag-open">5 OPEN · booking now</span>
                 </div>
                 <div className="slots">
-                  <div className="slot slot-full">
+                  <a className="slot slot-open" href="/apply?kind=build&variant=build-b">
                     <span className="n">MON</span>
-                    <span className="sticker">FILLED</span>
-                  </div>
-                  <div className="slot slot-full">
+                    <span className="state">OPEN →</span>
+                  </a>
+                  <a className="slot slot-open" href="/apply?kind=build&variant=build-b">
                     <span className="n">TUE</span>
-                    <span className="sticker">FILLED</span>
-                  </div>
-                  <div className="slot slot-full">
+                    <span className="state">OPEN →</span>
+                  </a>
+                  <a className="slot slot-open" href="/apply?kind=build&variant=build-b">
                     <span className="n">WED</span>
-                    <span className="sticker">FILLED</span>
-                  </div>
+                    <span className="state">OPEN →</span>
+                  </a>
                   <a className="slot slot-open" href="/apply?kind=build&variant=build-b">
                     <span className="n">THU</span>
                     <span className="state">OPEN →</span>
@@ -192,7 +192,7 @@ export default function BuildBPage() {
                 </div>
               </div>
               <div className="board-foot">
-                <span>launch price holds while seats are open</span>
+                <span>this week is fully booked · launch price holds until next week fills</span>
                 <span className="ok">first-come · first-locked</span>
               </div>
             </div>

@@ -16,6 +16,7 @@ type ApplyPayload = {
   shipped: string;
   name: string;
   email: string;
+  phone: string;
   ack: boolean;
   refCode?: string;
   utm?: Record<string, string>;
@@ -51,6 +52,9 @@ function parsePayload(body: unknown): ApplyPayload | null {
   if (!isString(b.shipped) || !b.shipped.trim()) return null;
   if (!isString(b.name) || !b.name.trim()) return null;
   if (!isString(b.email) || !b.email.trim()) return null;
+  const phone = isString(b.phone) ? b.phone.trim().slice(0, 40) : "";
+  const isNewOffer = b.variant === "build-b" || b.variant === "build-live";
+  if (isNewOffer && phone.replace(/\D/g, "").length < 7) return null;
   if (typeof b.ack !== "boolean" || !b.ack) return null;
 
   const projectText = isString(b.projectText) ? b.projectText : "";
@@ -85,6 +89,7 @@ function parsePayload(body: unknown): ApplyPayload | null {
     shipped: b.shipped,
     name: b.name,
     email: b.email,
+    phone,
     ack: b.ack,
     refCode,
     utm,
@@ -115,6 +120,7 @@ function buildHtml(p: ApplyPayload, submittedAt: string): string {
     ["Q5 — Shipped by day 7 looks like", p.shipped],
     ["Q6 — Name", p.name],
     ["Q6 — Email", p.email],
+    ["Q6 — Phone", p.phone || "(none)"],
     ["Acknowledgment", p.ack ? "Confirmed" : "Not confirmed"],
   );
   if (p.refCode) {
