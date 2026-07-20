@@ -353,11 +353,6 @@ export function ApplicationForm({
         </button>
       </div>
 
-      <p className="form-hint">
-        {isNewOffer
-          ? "Reply fast. Accepted: my AI does the onboarding call, Will jumps on to close, seat locks on a Square or Cash App link."
-          : "Reply in ~5 min. Accepted: Stripe link + Day 1 booking. Slot locks on payment."}
-      </p>
     </form>
   );
 }
