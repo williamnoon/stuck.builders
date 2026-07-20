@@ -6,7 +6,7 @@ import { ApplicationForm } from "@/components/ApplicationForm";
 export const metadata: Metadata = {
   title: "Apply for your Build seat | Stuck.builders",
   description:
-    "A few questions. My AI does the onboarding call, Will jumps on to close, seat locks on a Square or Cash App link.",
+    "A few questions about your business. Will reads every application himself.",
 };
 
 type Variant = "build-b" | "build-live" | "legacy";
