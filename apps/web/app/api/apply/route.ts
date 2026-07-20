@@ -175,10 +175,16 @@ export async function POST(req: Request) {
   const html = buildHtml(payload, submittedAt);
 
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.APPLICATIONS_EMAIL;
+  const toRaw = process.env.APPLICATIONS_EMAIL;
   const from = process.env.APPLICATIONS_FROM_EMAIL ?? "will@stuck.builders";
 
-  if (!apiKey || !to) {
+  // Support comma-separated APPLICATIONS_EMAIL for multi-recipient delivery
+  // (e.g. "will@stuck.builders,williamdeval@gmail.com").
+  const to = toRaw
+    ? toRaw.split(",").map((s) => s.trim()).filter(Boolean)
+    : [];
+
+  if (!apiKey || to.length === 0) {
     console.log("[apply] Resend not configured — logging application:", {
       subject,
       to,
