@@ -463,7 +463,7 @@ export default function JarvaisPage() {
                 You leave with a working HQ. From there, the Architect Retainer keeps building it — new
                 agents, deeper automation, and ongoing training as you scale. Graduates also get the
                 private <strong>$499 Ship Club</strong>.{" "}
-                <a href="https://skool.com/stucked2shipped">See Ship Club →</a>
+                <a href="https://www.skool.com/stuck2shipped/about">See Ship Club →</a>
               </p>
             </details>
           </div>
@@ -488,7 +488,7 @@ export default function JarvaisPage() {
         <CrossLink
           prompt="Graduates get the private Ship Club —"
           linkText="$499 · where builds compound →"
-          href="https://skool.com/stucked2shipped"
+          href="https://www.skool.com/stuck2shipped/about"
         />
       </main>
       <Footer />

@@ -553,7 +553,7 @@ export default function BuildLivePage() {
                 You leave with a system and a clear next move. 30 days of async support to keep you moving.
                 A 1-hour follow-up 1:1 two weeks later. Graduates unlock the private{" "}
                 <strong>$499 Ship Club</strong> — where builds keep compounding.{" "}
-                <a href="https://skool.com/stucked2shipped">See Ship Club →</a>
+                <a href="https://www.skool.com/stuck2shipped/about">See Ship Club →</a>
               </p>
             </details>
           </div>
@@ -584,7 +584,7 @@ export default function BuildLivePage() {
         <CrossLink
           prompt="Graduates get the private Ship Club —"
           linkText="$499 · builds compound here →"
-          href="https://skool.com/stucked2shipped"
+          href="https://www.skool.com/stuck2shipped/about"
         />
       </main>
       <Footer />

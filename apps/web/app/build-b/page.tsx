@@ -517,7 +517,7 @@ export default function BuildBPage() {
               <p className="a">
                 You leave with a system and a clear next move. Graduates unlock the private{" "}
                 <strong>$499 Ship Club</strong> — the room where builds keep compounding.{" "}
-                <a href="https://skool.com/stucked2shipped">See Ship Club →</a>
+                <a href="https://www.skool.com/stuck2shipped/about">See Ship Club →</a>
               </p>
             </details>
           </div>
@@ -542,7 +542,7 @@ export default function BuildBPage() {
         <CrossLink
           prompt="Graduates get the private Ship Club —"
           linkText="$499 · builds compound here →"
-          href="https://skool.com/stucked2shipped"
+          href="https://www.skool.com/stuck2shipped/about"
         />
       </main>
       <Footer />
