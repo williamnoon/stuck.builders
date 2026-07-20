@@ -8,9 +8,9 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "700"], variab
 const hand = Caveat({ subsets: ["latin"], weight: ["600", "700"], variable: "--font-hand" });
 
 export const metadata: Metadata = {
-  title: "Stuck to Shipped — Two Builds. Greenfield or Brownfield. Shipped in 7 days.",
+  title: "stuck.builders — The Build · your AI system, live in 4 hours",
   description:
-    "Two Builds. Greenfield $199 — no code yet. Brownfield $399 — existing project. Shipped in 7 days.",
+    "Live 4-hour virtual build, 1:1 with Will. You build your AI system hands-on. $1,995 limited-time launch (regular $2,995).",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

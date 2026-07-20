@@ -6,9 +6,23 @@ import { ValueStack } from "@/components/ValueStack";
 import { CrossLink } from "@/components/CrossLink";
 
 export const metadata: Metadata = {
-  title: "The Build (B) — Your AI system, live in 4 hours | Stuck.builders",
+  title: "The Build — Your AI system, live in 4 hours | Stuck.builders",
   description:
-    "Live 4-hour virtual build. You build your own AI system hands-on. Will unsticks you the second you stall. $1,995 limited-time launch (regular $2,995).",
+    "Live 4-hour virtual build, 1:1 with Will. You build your own AI system hands-on — Will unsticks you the second you stall. $1,995 limited-time launch (regular $2,995).",
+  openGraph: {
+    title: "The Build — Your AI system, live in 4 hours",
+    description:
+      "Live 4-hour virtual build, 1:1 with Will. $1,995 limited-time launch (regular $2,995).",
+    url: "https://www.stuck.builders",
+    siteName: "stuck.builders",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Build — Your AI system, live in 4 hours",
+    description:
+      "Live 4-hour virtual build, 1:1 with Will. $1,995 limited-time launch (regular $2,995).",
+  },
 };
 
 const INDUSTRIES = [
