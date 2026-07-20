@@ -23,8 +23,8 @@ type ApplyPayload = {
 };
 
 const VARIANT_LABEL: Record<ApplyVariant, string> = {
-  "build-b": "The Build (virtual · 4hr · $1,995 launch / $2,995 regular)",
-  "build-live": "The Build LIVE (Fri Sep 11 2026 · Bridgeview Room, Charleston SC · $1,995 launch / $5,995 regular)",
+  "build-b": "The Build — virtual 1:1 · 4hr · $1,995 launch / $2,995 reg",
+  "build-live": "The Build LIVE — 1:1 in-person · Fri Sep 11 2026 · Charleston · $1,995 launch / $5,995 reg",
   legacy: "Legacy Sprint (Greenfield / Brownfield)",
 };
 
