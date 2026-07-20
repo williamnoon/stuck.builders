@@ -8,7 +8,7 @@ import { CrossLink } from "@/components/CrossLink";
 export const metadata: Metadata = {
   title: "The Build (B) — Your AI system, live in 4 hours | Stuck.builders",
   description:
-    "Live 4-hour virtual build. You build your own AI system hands-on. Will unsticks you the second you stall. $995 limited-time launch (regular $2,995).",
+    "Live 4-hour virtual build. You build your own AI system hands-on. Will unsticks you the second you stall. $1,995 limited-time launch (regular $2,995).",
 };
 
 const INDUSTRIES = [
@@ -67,7 +67,7 @@ export default function BuildBPage() {
       >
         <span style={{ color: "#F4C56A" }}>// LAUNCH PRICE</span>{" "}
         <span style={{ textDecoration: "line-through", opacity: 0.55 }}>$2,995</span>{" "}
-        <strong style={{ color: "#F4C56A" }}>$995</strong> — limited time · then it goes back up
+        <strong style={{ color: "#F4C56A" }}>$1,995</strong> — limited time · then it goes back up
       </div>
 
       <TopBar />
@@ -120,7 +120,7 @@ export default function BuildBPage() {
 
           <div className="hero-cta">
             <a className="btn" href="/apply?kind=build&variant=build-b">
-              Apply for a seat — $995 →
+              Apply for a seat — $1,995 →
             </a>
             <span className="btn-note">
               regular $2,995 · limited-time launch · apply → AI onboarding call → Will closes →
@@ -388,7 +388,7 @@ export default function BuildBPage() {
                   />
                 </svg>
                 <div className="price">
-                  <sup>$</sup>995
+                  <sup>$</sup>1,995
                 </div>
               </div>
               <p className="price-sub">
@@ -442,11 +442,11 @@ export default function BuildBPage() {
                   },
                 ]}
                 totalValue="$21,199"
-                price="$995"
-                priceReason="limited-time launch price · 21× value at launch · 7× at regular ($2,995) · graduates unlock the private $499 Ship Club after"
+                price="$1,995"
+                priceReason="limited-time launch price · 10× value at launch · 7× at regular ($2,995) · graduates unlock the private $499 Ship Club after"
               />
               <a className="btn" href="/apply?kind=build&variant=build-b">
-                Apply for a seat — $995 →
+                Apply for a seat — $1,995 →
               </a>
               <p className="pay-note">
                 <strong style={{ color: "var(--white)" }}>How it works:</strong> apply →{" "}
@@ -464,7 +464,7 @@ export default function BuildBPage() {
           stampTop="UNSTUCK"
           stampBottom="OR REFUND"
           headline="You leave with your system running. Or you don't pay."
-          body="If you don't walk out of the 4 hours with a working AI system you built, your operating environment to keep, and your next 3 moves in writing — I refund the full $995. All of it."
+          body="If you don't walk out of the 4 hours with a working AI system you built, your operating environment to keep, and your next 3 moves in writing — I refund the full $1,995. All of it."
           handNote="the whole point is that you leave unstuck. if you don't, that's on me."
         />
 
@@ -506,7 +506,7 @@ export default function BuildBPage() {
               </p>
             </details>
             <details>
-              <summary>Why is it $995?</summary>
+              <summary>Why is it $1,995?</summary>
               <p className="a">
                 Limited-time launch price. After that it goes back up to $2,995. Flat price either way — no
                 upsells inside the session.
