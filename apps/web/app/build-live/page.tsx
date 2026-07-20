@@ -577,7 +577,7 @@ export default function BuildLivePage() {
 
         <CrossLink
           prompt="Can&apos;t make an in-person day?"
-          linkText="try the virtual build — 4hrs, 1:1, $3,500 →"
+          linkText="try the virtual build — 4hrs, 1:1, $995 launch →"
           href="/build-b"
         />
 

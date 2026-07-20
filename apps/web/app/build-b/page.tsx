@@ -8,7 +8,7 @@ import { CrossLink } from "@/components/CrossLink";
 export const metadata: Metadata = {
   title: "The Build (B) — Your AI system, live in 4 hours | Stuck.builders",
   description:
-    "Live 4-hour virtual build. You build your own AI system hands-on. Will unsticks you the second you stall. $3,500 launch price.",
+    "Live 4-hour virtual build. You build your own AI system hands-on. Will unsticks you the second you stall. $995 limited-time launch (regular $2,995).",
 };
 
 const INDUSTRIES = [
@@ -66,8 +66,8 @@ export default function BuildBPage() {
         }}
       >
         <span style={{ color: "#F4C56A" }}>// LAUNCH PRICE</span>{" "}
-        <span style={{ textDecoration: "line-through", opacity: 0.55 }}>$4,995</span>{" "}
-        <strong style={{ color: "#F4C56A" }}>$3,500</strong> — next 12 hours · then it goes back up
+        <span style={{ textDecoration: "line-through", opacity: 0.55 }}>$2,995</span>{" "}
+        <strong style={{ color: "#F4C56A" }}>$995</strong> — limited time · then it goes back up
       </div>
 
       <TopBar />
@@ -120,10 +120,10 @@ export default function BuildBPage() {
 
           <div className="hero-cta">
             <a className="btn" href="/apply?kind=build&variant=build-b">
-              Apply for a seat — $3,500 →
+              Apply for a seat — $995 →
             </a>
             <span className="btn-note">
-              was $4,995 · launch price for the next 12 hours · apply → AI onboarding call → Will closes →
+              regular $2,995 · limited-time launch · apply → AI onboarding call → Will closes →
               Square / Cash App link
             </span>
           </div>
@@ -388,12 +388,12 @@ export default function BuildBPage() {
                   />
                 </svg>
                 <div className="price">
-                  <sup>$</sup>3,500
+                  <sup>$</sup>995
                 </div>
               </div>
               <p className="price-sub">
-                <span style={{ textDecoration: "line-through", opacity: 0.55 }}>Regular $4,995</span> —
-                launch price for the next 12 hours.
+                <span style={{ textDecoration: "line-through", opacity: 0.55 }}>Regular $2,995</span> —
+                limited-time launch price. Then it goes back up.
               </p>
               <span className="price-hand hand">
                 flat price. no upsells inside the session. no &quot;let&apos;s hop on a quick call.&quot;
@@ -442,11 +442,11 @@ export default function BuildBPage() {
                   },
                 ]}
                 totalValue="$21,199"
-                price="$3,500"
-                priceReason="one flat launch price · 6.05× the price in value · graduates unlock the private $499 Ship Club after"
+                price="$995"
+                priceReason="limited-time launch price · 21× value at launch · 7× at regular ($2,995) · graduates unlock the private $499 Ship Club after"
               />
               <a className="btn" href="/apply?kind=build&variant=build-b">
-                Apply for a seat — $3,500 →
+                Apply for a seat — $995 →
               </a>
               <p className="pay-note">
                 <strong style={{ color: "var(--white)" }}>How it works:</strong> apply →{" "}
@@ -464,7 +464,7 @@ export default function BuildBPage() {
           stampTop="UNSTUCK"
           stampBottom="OR REFUND"
           headline="You leave with your system running. Or you don't pay."
-          body="If you don't walk out of the 4 hours with a working AI system you built, your operating environment to keep, and your next 3 moves in writing — I refund the full $3,500. All of it."
+          body="If you don't walk out of the 4 hours with a working AI system you built, your operating environment to keep, and your next 3 moves in writing — I refund the full $995. All of it."
           handNote="the whole point is that you leave unstuck. if you don't, that's on me."
         />
 
@@ -506,10 +506,10 @@ export default function BuildBPage() {
               </p>
             </details>
             <details>
-              <summary>Why is it $3,500?</summary>
+              <summary>Why is it $995?</summary>
               <p className="a">
-                That&apos;s the launch price for the next 12 hours only. After that it returns to $4,995.
-                Flat price, no upsells inside the session.
+                Limited-time launch price. After that it goes back up to $2,995. Flat price either way — no
+                upsells inside the session.
               </p>
             </details>
             <details>
