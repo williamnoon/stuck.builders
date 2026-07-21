@@ -211,30 +211,16 @@ export async function POST(req: Request) {
     });
     if (result.error) {
       console.error("[apply] Resend error:", result.error);
-      const detail = typeof result.error === "object" && result.error && "message" in result.error
-        ? String((result.error as { message: unknown }).message)
-        : String(result.error);
       return NextResponse.json(
-        {
-          error: "Could not send. Please email will@stuck.builders directly.",
-          resendError: detail,
-          resendFrom: from,
-          resendTo: to,
-        },
+        { error: "Could not send. Please email will@stuck.builders directly." },
         { status: 500 },
       );
     }
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[apply] Resend threw:", err);
-    const detail = err instanceof Error ? err.message : String(err);
     return NextResponse.json(
-      {
-        error: "Could not send. Please email will@stuck.builders directly.",
-        resendError: detail,
-        resendFrom: from,
-        resendTo: to,
-      },
+      { error: "Could not send. Please email will@stuck.builders directly." },
       { status: 500 },
     );
   }
