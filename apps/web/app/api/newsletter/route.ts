@@ -33,7 +33,10 @@ export async function POST(req: Request) {
   const submittedAt = new Date().toISOString();
   const apiKey = process.env.RESEND_API_KEY;
   const toRaw = process.env.APPLICATIONS_EMAIL;
-  const from = process.env.APPLICATIONS_FROM_EMAIL ?? "will@stuck.builders";
+  const fromRaw = process.env.APPLICATIONS_FROM_EMAIL ?? "will@stuck.builders";
+  // `from` must be a single address — defensive split in case env var was
+  // set to a comma-separated list by mistake.
+  const from = fromRaw.split(",")[0]!.trim();
   const to = toRaw ? toRaw.split(",").map((s) => s.trim()).filter(Boolean) : [];
 
   const subject = `[stuck.builders] Newsletter signup — ${email}`;
