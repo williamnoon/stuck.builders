@@ -69,11 +69,21 @@ export async function POST(req: Request) {
     });
     if (result.error) {
       console.error("[newsletter] Resend error:", result.error);
-      return NextResponse.json({ error: "Could not save signup." }, { status: 500 });
+      const detail = typeof result.error === "object" && result.error && "message" in result.error
+        ? String((result.error as { message: unknown }).message)
+        : String(result.error);
+      return NextResponse.json(
+        { error: "Could not save signup.", resendError: detail, resendFrom: from, resendTo: to },
+        { status: 500 },
+      );
     }
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[newsletter] Resend threw:", err);
-    return NextResponse.json({ error: "Could not save signup." }, { status: 500 });
+    const detail = err instanceof Error ? err.message : String(err);
+    return NextResponse.json(
+      { error: "Could not save signup.", resendError: detail, resendFrom: from, resendTo: to },
+      { status: 500 },
+    );
   }
 }
