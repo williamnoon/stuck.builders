@@ -552,6 +552,12 @@ export default function BuildBPage() {
         </div>
 
         <CrossLink
+          prompt="First time here? Grab the free cheatsheets first —"
+          linkText="Free Claude Code cheatsheets →"
+          href="/free"
+        />
+
+        <CrossLink
           prompt="Graduates get the private Ship Club —"
           linkText="$499 · builds compound here →"
           href="https://www.skool.com/stuck2shipped/about"
