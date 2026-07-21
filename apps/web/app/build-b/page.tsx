@@ -8,11 +8,11 @@ import { CrossLink } from "@/components/CrossLink";
 export const metadata: Metadata = {
   title: "The Build — Your AI system, live in 4 hours | Stuck.builders",
   description:
-    "Live 4-hour virtual build, 1:1 with Will. You build your own AI system hands-on — Will unsticks you the second you stall. $1,995 limited-time launch (regular $2,995).",
+    "Live 4-hour virtual build, 1:1 with Will. You build your own AI system hands-on — Will unsticks you the second you stall. $1,995 launch price — going up soon.",
   openGraph: {
     title: "The Build — Your AI system, live in 4 hours",
     description:
-      "Live 4-hour virtual build, 1:1 with Will. $1,995 limited-time launch (regular $2,995).",
+      "Live 4-hour virtual build, 1:1 with Will. $1,995 launch price — going up soon.",
     url: "https://www.stuck.builders",
     siteName: "stuck.builders",
     type: "website",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "The Build — Your AI system, live in 4 hours",
     description:
-      "Live 4-hour virtual build, 1:1 with Will. $1,995 limited-time launch (regular $2,995).",
+      "Live 4-hour virtual build, 1:1 with Will. $1,995 launch price — going up soon.",
   },
 };
 
@@ -80,8 +80,7 @@ export default function BuildBPage() {
         }}
       >
         <span style={{ color: "#F4C56A" }}>// LAUNCH PRICE</span>{" "}
-        <span style={{ textDecoration: "line-through", opacity: 0.55 }}>$2,995</span>{" "}
-        <strong style={{ color: "#F4C56A" }}>$1,995</strong> — limited time · then it goes back up
+        <strong style={{ color: "#F4C56A" }}>$1,995</strong> — launch pricing while it lasts. Then the price goes up.
       </div>
 
       <TopBar />
@@ -137,7 +136,7 @@ export default function BuildBPage() {
               Apply for a seat — $1,995 →
             </a>
             <span className="btn-note">
-              regular $2,995 · limited-time launch · apply → AI onboarding call → Will closes →
+              launch price · going up soon · apply → AI onboarding call → Will closes →
               Square / Cash App link
             </span>
           </div>
@@ -406,8 +405,7 @@ export default function BuildBPage() {
                 </div>
               </div>
               <p className="price-sub">
-                <span style={{ textDecoration: "line-through", opacity: 0.55 }}>Regular $2,995</span> —
-                limited-time launch price. Then it goes back up.
+                Launch pricing while it lasts. Then the price goes up — and it won&apos;t come back down.
               </p>
               <span className="price-hand hand">
                 flat price. no upsells inside the session. no &quot;let&apos;s hop on a quick call.&quot;
@@ -457,7 +455,7 @@ export default function BuildBPage() {
                 ]}
                 totalValue="$21,199"
                 price="$1,995"
-                priceReason="limited-time launch price · 10× value at launch · 7× at regular ($2,995) · graduates unlock the private $499 Ship Club after"
+                priceReason="launch pricing while it lasts · 10× value at the launch price · graduates unlock the private $499 Ship Club after"
               />
               <a className="btn" href="/apply?kind=build&variant=build-b">
                 Apply for a seat — $1,995 →
@@ -522,8 +520,8 @@ export default function BuildBPage() {
             <details>
               <summary>Why is it $1,995?</summary>
               <p className="a">
-                Limited-time launch price. After that it goes back up to $2,995. Flat price either way — no
-                upsells inside the session.
+                Launch pricing while it lasts. After that, the price goes up — and it won&apos;t come back
+                down. Flat price either way — no upsells inside the session.
               </p>
             </details>
             <details>

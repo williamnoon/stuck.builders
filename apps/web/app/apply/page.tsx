@@ -25,12 +25,12 @@ const VARIANT_CONFIG: Record<Variant, {
   "build-b": {
     eyebrow: "// APPLICATION — THE BUILD · virtual · 4 hours · 1:1",
     h2: "A few questions. Then a call. Then you're in.",
-    handNote: "$1,995 launch (regular $2,995) · 1 seat a day · Mon–Fri",
+    handNote: "$1,995 launch price · 1 seat a day · Mon–Fri · price goes up soon",
   },
   "build-live": {
     eyebrow: "// APPLICATION — THE BUILD LIVE · Fri Sep 11, 2026 · Bridgeview Room, Charleston SC",
     h2: "A few questions. Then a call. Then you're in the room.",
-    handNote: "$1,995 launch (first 10) · then $5,995 · in-person day, 9am–3pm",
+    handNote: "$1,995 launch · first 10 seats only · then the price goes up · in-person day, 9am–3pm",
   },
   legacy: {
     eyebrow: "// APPLICATION",

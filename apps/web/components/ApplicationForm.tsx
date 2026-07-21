@@ -293,7 +293,7 @@ export function ApplicationForm({
               <>
                 <strong>The Build</strong> — live · virtual · 4 hours · 1:1 with Will<br />
                 <span style={{ color: "var(--gray)" }}>
-                  $1,995 limited-time launch · regular $2,995
+                  $1,995 launch price · going up soon
                 </span>
               </>
             ) : (
@@ -301,7 +301,7 @@ export function ApplicationForm({
                 <strong>The Build — LIVE</strong> — in-person · Fri Sep 11, 2026 · Bridgeview Room,
                 Charleston Digital, Charleston SC<br />
                 <span style={{ color: "var(--gray)" }}>
-                  $1,995 launch (first 10 seats) · then $5,995
+                  $1,995 launch price · first 10 seats only · then the price goes up
                 </span>
               </>
             )}

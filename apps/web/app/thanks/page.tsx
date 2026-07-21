@@ -34,7 +34,7 @@ const VARIANT_CONFIG: Record<Variant, {
     sub: (
       <>
         You applied for <strong>The Build</strong> — live · virtual · 4 hours · 1:1 with Will.{" "}
-        <strong>$1,995 launch (regular $2,995).</strong>
+        <strong>$1,995 launch price — going up soon.</strong>
         <br />
         <br />
         <strong>Next:</strong> Will reads your application himself. If it&apos;s a fit, we call to
@@ -56,7 +56,7 @@ const VARIANT_CONFIG: Record<Variant, {
     sub: (
       <>
         You applied for <strong>The Build — LIVE</strong> — in-person, Fri Sep 11, 2026, Bridgeview
-        Room at Charleston Digital. <strong>$1,995 launch (first 10 seats) · then $5,995.</strong>
+        Room at Charleston Digital. <strong>$1,995 launch price — first 10 seats only. Then the price goes up.</strong>
         <br />
         <br />
         <strong>Next:</strong> Will reads your application himself. If it&apos;s a fit, we call to

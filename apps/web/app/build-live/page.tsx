@@ -8,7 +8,7 @@ import { CrossLink } from "@/components/CrossLink";
 export const metadata: Metadata = {
   title: "The Build (Live) — In-person, one day, your AI system live in the room | Stuck.builders",
   description:
-    "Fri Sep 11, 2026 — one full day, in-person at Charleston Digital's Bridgeview Room, Charleston SC. First 10 launch seats at $1,995 — then $5,995.",
+    "Fri Sep 11, 2026 — one full day, 1:1 in-person at Charleston Digital's Bridgeview Room, Charleston SC. Launch price $1,995 — first 10 seats only. Then the price goes up.",
 };
 
 const INDUSTRIES = [
@@ -102,9 +102,9 @@ export default function BuildLivePage() {
           borderBottom: "2px solid #C93A2B",
         }}
       >
-        <span style={{ color: "#F4C56A" }}>// LAUNCH</span> — first{" "}
-        <strong style={{ color: "#F4C56A" }}>10 seats at $1,995</strong>{" "}
-        <span style={{ opacity: 0.75 }}>(regular $5,995)</span> · <strong style={{ color: "#F4C56A" }}>Fri Sep 11, 2026</strong> · Charleston SC
+        <span style={{ color: "#F4C56A" }}>// LAUNCH PRICE</span>{" "}
+        <strong style={{ color: "#F4C56A" }}>$1,995</strong> — first 10 seats only. Then it goes up. ·{" "}
+        <strong style={{ color: "#F4C56A" }}>Fri Sep 11, 2026</strong> · Charleston SC
       </div>
 
       <TopBar />
@@ -164,7 +164,7 @@ export default function BuildLivePage() {
               Apply for a launch seat — $1,995 →
             </a>
             <span className="btn-note">
-              regular $5,995 · first 10 apply-in-early get the launch price · apply → AI onboarding call →
+              first 10 seats only at $1,995 · then the price goes up · apply → AI onboarding call →
               Will closes → Square / Cash App link
             </span>
           </div>
@@ -239,7 +239,7 @@ export default function BuildLivePage() {
         <section className="board">
           <div className="wrap">
             <div className="board-title">
-              <span className="hand">first 10 launch seats · then $5,995</span>
+              <span className="hand">10 launch seats at $1,995 · when they&apos;re gone, the price goes up</span>
             </div>
             <div className="board-frame">
               <span className="tape tl" />
@@ -268,7 +268,7 @@ export default function BuildLivePage() {
               </div>
               <div className="board-foot">
                 <span>launch price holds until all 10 seats commit</span>
-                <span className="ok">then it goes to $5,995</span>
+                <span className="ok">when they&apos;re gone, they&apos;re gone</span>
               </div>
             </div>
           </div>
@@ -412,8 +412,8 @@ export default function BuildLivePage() {
                 </div>
               </div>
               <p className="price-sub">
-                <span style={{ textDecoration: "line-through", opacity: 0.55 }}>Regular $5,995</span> —
-                launch price for the first 10 seats. Then it goes up.
+                Launch price — first 10 seats only. When they&apos;re gone, they&apos;re gone, and the
+                price goes up.
               </p>
               <span className="price-hand hand">
                 one flat launch price. no upsells, no &quot;let&apos;s hop on a quick call.&quot;
@@ -473,7 +473,7 @@ export default function BuildLivePage() {
                 ]}
                 totalValue="$36,499"
                 price="$1,995"
-                priceReason="launch price for the first 10 seats · 18.3× value at launch · 6.1× at regular ($5,995) · graduates unlock the private $499 Ship Club after"
+                priceReason="launch price for the first 10 seats · 18× value at launch · when the 10 are gone, the price goes up · graduates unlock the private $499 Ship Club after"
               />
               <a className="btn" href="/apply?kind=build&variant=build-live">
                 Apply for a launch seat — $1,995 →
@@ -482,8 +482,8 @@ export default function BuildLivePage() {
                 <strong style={{ color: "var(--white)" }}>How it works:</strong> apply →{" "}
                 <span className="ok">my AI does the onboarding call</span> to qualify + scope your build →
                 Will jumps on to close → I send a Square or Cash App link →{" "}
-                <span className="ok">seat locked</span> · first 10 in get the launch price · then $5,995 ·
-                venue: Bridgeview Conference Room · Charleston Digital · Charleston SC
+                <span className="ok">seat locked</span> · first 10 seats only at $1,995 · then the price
+                goes up · venue: Bridgeview Conference Room · Charleston Digital · Charleston SC
               </p>
             </div>
           </div>
@@ -513,15 +513,15 @@ export default function BuildLivePage() {
                 Charleston SC. Floor-to-ceiling glass view of the Ravenel Bridge and Charleston Harbor,
                 attached rooftop terrace and putting green, prep kitchen, extra-large A/V monitor,
                 livestream + recording equipped. Catered Mediterranean pita bar for lunch.{" "}
-                <strong>Fri Sep 11, 2026, 9am–3pm.</strong> Apply early — only 10 launch seats before it
-                goes to $5,995.
+                <strong>Fri Sep 11, 2026, 9am–3pm.</strong> Apply early — only 10 launch seats at $1,995
+                before the price goes up.
               </p>
             </details>
             <details>
               <summary>Why is it $1,995?</summary>
               <p className="a">
-                Because you&apos;re a launch seat. First 10 apply-and-close-in get the launch price to help
-                me lock a venue and prove the room. After that, it&apos;s $5,995 flat. Same day. Same build.
+                The $1,995 launch rate covers the first 10 seats only. After that, the price goes up —
+                and it won&apos;t come back down. Same day. Same build. Just a different rate.
               </p>
             </details>
             <details>
