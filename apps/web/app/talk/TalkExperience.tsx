@@ -69,7 +69,7 @@ export function TalkExperience() {
         id: "seed-1",
         role: "assistant",
         content:
-          "I'm one agent from Will's OS. My job: fit-check you against The Build before you apply, then pre-fill your application if you're in. What kind of business do you run, and where does the week get eaten?",
+          "I'm one agent from Will's OS. My job: fit-check you against The Build before you apply, then pre-fill your application. What kind of business do you run, and where does the week get eaten?",
       },
     ],
   });

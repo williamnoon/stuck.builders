@@ -181,9 +181,9 @@ export async function POST(req: Request) {
             .describe("Estimated time saved weekly, always with a tilde, e.g. '~4h'"),
           sampleLine: z
             .string()
-            .max(200)
+            .max(280)
             .optional()
-            .describe("Optional one-line sample of output"),
+            .describe("Optional one-line sample of output. Keep concise — under 240 chars ideal."),
         }),
         execute: async (input) => {
           inTurnStaged.set(input.slot, input as StagedSystem);
@@ -197,17 +197,24 @@ export async function POST(req: Request) {
       capture_lead: tool({
         description:
           "Save the visitor's contact info as a lead so the /apply form pre-fills. " +
-          "Only call after they explicitly share these details in chat. Ask ONCE " +
-          "for name + email + phone + website (website optional). One tool call, " +
-          "not four. If they only give some, pass what you have — the rest can " +
-          "be filled on the form.",
+          "ONLY call after they explicitly share a REAL email address in chat. " +
+          "Never call with placeholder values like 'UNKNOWN', 'test@example.com', " +
+          "or made-up emails — server rejects these and the turn errors out. " +
+          "If you don't have their real email yet, emit a text reply asking for " +
+          "it (with name/phone/website in the same ask) instead of calling this tool.",
         parameters: z.object({
           name: z
             .string()
             .max(80)
             .optional()
             .describe("Visitor's name as they typed it. Omit if not given."),
-          email: z.string().email(),
+          email: z
+            .string()
+            .email()
+            .refine((v) => !/^unknown|^n\/a$|^none$|placeholder/i.test(v), {
+              message:
+                "Placeholder email detected. Wait for the visitor's real email before calling capture_lead.",
+            }),
           phone: z
             .string()
             .max(40)
