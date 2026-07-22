@@ -130,8 +130,32 @@ export async function POST(req: Request) {
   // staged systems from the incoming messages. If < 3, the next turn MUST
   // call a tool (the model can pick stage_system, prep_brief, or capture_lead
   // — but it cannot end with pure prose describing systems).
+  //
+  // GATED on user-input length: if the visitor's last message is terse
+  // (< 40 chars or < 7 words), the model gets 'auto' so it can emit a
+  // clarifying question instead of fabricating a staged system from thin
+  // context. Without this gate, "roofing" as a first message becomes
+  // 3 fully invented systems + a fabricated prep_brief.
   const { staged: priorStaged } = reconstructContext(messages);
-  const requireTool = priorStaged.length < 3;
+  const lastUserMessage = (() => {
+    if (!Array.isArray(messages)) return "";
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const m = messages[i] as { role?: string; content?: unknown };
+      if (m?.role !== "user") continue;
+      if (typeof m.content === "string") return m.content;
+      if (Array.isArray(m.content)) {
+        return (m.content as Array<{ text?: string }>)
+          .map((c) => c.text ?? "")
+          .join(" ");
+      }
+      return "";
+    }
+    return "";
+  })().trim();
+  const hasEnoughContext =
+    lastUserMessage.length >= 40 ||
+    lastUserMessage.split(/\s+/).filter(Boolean).length >= 7;
+  const requireTool = priorStaged.length < 3 && hasEnoughContext;
 
   const result = streamText({
     model: anthropic("claude-sonnet-4-5"),

@@ -79,13 +79,12 @@ export function TalkExperience() {
     [messages],
   );
 
-  useEffect(() => {
-    if (staged.length >= 3 && !drawerOpen) {
-      if (typeof window !== "undefined" && window.innerWidth < 900) {
-        setDrawerOpen(true);
-      }
-    }
-  }, [staged.length, drawerOpen]);
+  // Intentionally NOT auto-opening the drawer on mobile when staged.length
+  // hits 3. The `0/3 staged` button in the nav shows count updates, and the
+  // "YOU'RE READY" banner is visible above the composer on all viewports —
+  // both give the visitor a clear next step without stealing focus. Auto-open
+  // was causing an unexplained navigation-to-apply on mobile during the smoke
+  // test.
 
   // Mirror conversation state to localStorage so /apply can prefill.
   useEffect(() => {
