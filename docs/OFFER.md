@@ -1,297 +1,109 @@
-# Stuck to Shipped — Offer Doc
+# OFFER — stuck.builders
 
-**Framing:** `docs/PRD.md` is the source of truth for the whole business (ladder,
-sprints, forms, pages, ads, launch order). This doc is the **offer chassis** —
-Hormozi's Value Equation and value-stack model applied to each product so
-landing-page copy, ad hooks, and price frames stay coherent as they evolve.
-When PRD and OFFER disagree, PRD wins; update this doc to match.
+Source of truth is the live site (`apps/web/app/build-b/page.tsx`, `apps/web/app/build-live/page.tsx`). This doc describes what's live so subagents can reason without opening every file.
 
-## The Value Equation
+Two products (both "The Build," different modalities) plus a graduates-only community back-end.
 
-    Value = (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort)
+---
 
-Every page pushes both numerators up (bigger outcome, more believable) and both
-denominators down (faster, easier). If a page isn't doing all four, it's leaking
-value.
+## Value Equation quick reference
 
-## The Ladder & LTV
+Value = (Dream Outcome x Perceived Likelihood) / (Time Delay x Effort)
 
-Text version of the ladder in PRD §2. One customer moves through it for life:
-sprint to break a wall, drop to community for pace, sprint again at the next
-wall.
+Every offer below is scored against this. Do not remove any element to "clean up" copy.
 
-    $199 GREENFIELD  →  $399 BROWNFIELD  →  $69/mo or $500/yr SKOOL
-                                             (7-day free trial)
-       │                    │                          │
-     imaginative        unstuck +                 weekly Labs +
-     solution +         deployed live             library + feed
-     PRD + demo         next version
-       └────────────────┴──────────────────────────────┘
-                        ↓
-              FORK (after any sprint)
-         ┌───────────────┴───────────────┐
-       keep sprinting            drop to Skool
-       ($399, next wall)         ($69/mo · $500/yr, trial)
+---
 
-**LTV of the full chain:** $199 + $399 + $69/mo (or $500/yr) = **$598 upfront +
-$69/mo indefinite** (annual saves $328/yr).
+## 1. The Build — `/build-b`
 
-*"Launch Sprint" was retired. Traction is just a next version — a Brownfield
-Build whose Day-7 target = "first 10 users reached" is still a Brownfield
-Build. `/brownfield#traction` is a Brownfield hero variant angled at "shipped,
-no users."*
+**Modality:** virtual 1:1 with Will over 4 hours.
+**Price:** $1,995 launch (going up).
+**Capacity:** 1 seat/day, Mon–Fri.
+**Apply flow:** `/apply?kind=build&variant=build-b`.
 
-## Products
+### Dream Outcome
+One AI operating system running your business. You walk out of the session with it live on your laptop, tailored to your industry, tools connected, and the next 3 moves written down. You are no longer the bottleneck.
 
-Two sprint SKUs + one community. Same 7-day skeleton, same runbook, same
-calendar (§PRD 3). Same productized setup-to-win operating environment
-(prompts, docs, tools, skills we build together and the customer keeps using).
-Only the work inside the containers changes.
+### Perceived Likelihood levers
+- Will next to you the entire time — hands-on-their-keyboard model, not a course, not a demo.
+- Prebuilt skill library + multi-model core installed live on your machine.
+- 10 industries, 4 AI models, 35+ business tools already supported (Real Estate, E-commerce, Trades, Coaching, Marketing Agencies, Finance, Health, Beauty, Hospitality, Professional Services).
+- UNSTUCK OR REFUND guarantee.
 
-*Terminology:* **Greenfield** = no code yet. **Brownfield** = existing project.
-Users may not know the engineering terms — every product page defines them
-visually + textually.
+### Time Delay
+Same day. 4 hours from "empty laptop" to "system live." No sprint week, no async back-and-forth.
 
-### Greenfield Build — `/greenfield` — $199
+### Effort
+You bring: laptop + your business context. Will brings: environment, skills, playbooks, integrations. You type; Will unsticks the second you stall.
 
-- **Wedge:** AI democratized building. Almost nobody can conceive an idea worth
-  building. This sprint fills that constraint.
-- **Dream outcome:** walk out with **the imaginative solution** — an idea worth
-  building, shaped by Will's taste + judgment — plus the working AI-native demo
-  of it, the PRD, and the operating environment to keep shipping.
-- **The imaginative solution is the deliverable.** The PRD, the demo, and the
-  operating environment are **artifacts** of that solution — the delivery
-  vehicle, not the outcome. In an era where AI writes code on demand, the
-  constraint that binds most would-be builders is not implementation capacity;
-  it's the ability to conceive a solution worth implementing.
-- **Likelihood levers:** four filters (§PRD 6) on Day 1, background-mining
-  interview (finds closer, better ideas from the customer's own life), Will's
-  taste + judgment applied through Days 2–6 of pressure-testing against real
-  people, hands-on-their-keyboard build days, PRD + demo as proof artifacts.
-- **Time delay:** 7 days.
-- **Effort:** 30–60 min/day + one ~30 min Day 1 call.
-- **Value stack (imaginative solution leads as the largest anchor):**
-  - **The imaginative solution** — the shape of an idea worth building,
-    developed with Will's taste + judgment across Day 1 background-mining and
-    Days 2–6 of pressure-testing — **$1,000**
-  - Day 1 background-mining call + four-filter pressure-test — $400
-  - 1–2 page PRD documenting the solution — $400
-  - Built AI-native demo (MVP-grade, running) of the solution — $600
-  - Operating environment set up together (prompts, docs, tools, skills — kept
-    for life) — $400
-  - Next-3-steps handoff — $200
-  - **Total: $3,000 → $199** (15× multiplier, well above the >6× rule).
-- **Guarantee stamp:** `SOLUTION + DEMO / OR REFUND`.
-  > "If you don't walk away with an imaginative solution you believe is worth
-  > building, a working AI-native demo of it, and the operating environment we
-  > built together by the Day 7 delivery call, I refund the full $199. All of
-  > it. A 'don't build this' verdict — with the demo as a pivot artifact —
-  > still counts as delivery, but if you don't get the deliverables at all,
-  > you don't pay."
-- **Marketing honesty:** we don't guarantee the idea will make money. We
-  guarantee we help you conceive a solution *worth building*, prove it with a
-  working demo, and equip you with the environment to keep shipping. Promise
-  "imaginative solution + PRD + built demo," not "an app in 7 days."
+### Value stack (totals $21,199)
+Lives in `apps/web/app/build-b/page.tsx`. Anchors include: Claude Code environment install, prebuilt skill library, multi-model core, tool integrations, tailored playbook, live 1:1 hours, 3-move written plan. Update page + this line together.
 
-### Brownfield Build — `/brownfield` — $399  ← core product
+### Guarantee
+UNSTUCK OR REFUND. If you don't leave with a live system that unblocks the thing you came in stuck on, full refund.
 
-- **Dream outcome:** unstuck + your next version deployed live at a real URL by
-  Day 7.
-- **Likelihood levers:** Day 1 scope-lock in the customer's own words, adaptive
-  daily cadence (rhythm shaped by what the scoped feature/fix actually needs),
-  up to 5 unstick calls × 10 min, Day 7 ship review with the deployed URL.
-- **Time delay:** 7 days.
-- **Effort:** 15–30 min/day + up to 5 unstick calls (10 min each).
-- **Scope constraint:** one *major* feature OR one *major* fix. Locked Day 1,
-  no mid-sprint renegotiation.
-- **Value stack (identical across all Brownfield hero variants):**
-  - Day 1 scoping call + Version Map (locked scope in your own words) — $400
-  - 6 days of adaptive daily co-working sessions — $1,800
-  - Up to 5 unstick calls × 10 min — $500
-  - Deployment to production URL — $400
-  - Session recordings + next-version roadmap — $200
-  - Operating environment kept (prompts, docs, tools, skills) — $400
-  - **Total: $3,700 → $399.**
-- **Guarantee** (identical across all Brownfield hero variants — `SHIPPED / OR
-  REFUND`):
-  > "Deployed by Day 7. Or your money back. If your next version isn't live on
-  > a real URL by the Day 7 ship review — deployed, working, visitable — I
-  > refund the full $399. Not part of it. All of it. No form, no back-and-
-  > forth, no fine print. One reply and it's done."
+### Scarcity
+1 seat/day, Mon–Fri. Launch price expires (going up soon).
 
-### Brownfield Build — Ceiling variant — `/brownfield#ceiling` — $399
+### Reason-why-for-price
+Launch pricing while we build case studies. Price goes up after.
 
-Same SKU, same value stack, same guarantee. Angle-specific hero + one
-supporting paragraph.
+---
 
-- **Angle:** off the ceiling. TRAPPED → SHIPPED. Lovable / Bolt / v0 / Replit
-  users hitting the platform ceiling — fix in place or clean move to code you
-  own.
-- **Two-path framing:** decided Day 1 — fix on the platform vs. clean move to
-  Next.js on Vercel with the repo in your GitHub.
+## 2. The Build LIVE — `/build-live`
 
-### Brownfield Build — Traction variant — `/brownfield#traction` — $399
+**Modality:** in-person 1:1 with Will, one full day.
+**When:** Fri Sep 11, 2026, 9am–3pm ET.
+**Where:** Bridgeview Conference Room, Charleston Digital, Charleston SC.
+**Price:** $1,995 launch — first 10 seats only.
+**Apply flow:** `/apply?kind=build&variant=build-live`.
 
-Same SKU, same value stack, same guarantee. Angle-specific hero + one
-supporting paragraph.
+Same core deliverable as The Build (system live on your laptop, tailored, integrations wired, 3-move plan), plus:
 
-- **Angle:** first users reached. Next-version target = a traction milestone
-  (5–10 real potential users conversed with, one angle proven live, first
-  outreach shipped) instead of a code feature.
-- **Day 1 scope-lock** on the traction milestone as the Brownfield target.
-  Same daily cadence, same 5 × 10-min unstick calls, same Day 7 ship review
-  (deployed = the traction milestone shipped).
+- Private rooftop putting green between sessions.
+- Catered Mediterranean pita bar lunch (chicken, tzatziki, hummus, feta, warm pita).
+- In-person coffee + workspace at a real conference room.
 
-### Skool Community — `/community` — $69/mo or $500/yr (7-day free trial)
+### Value stack (totals $36,499)
+Lives in `apps/web/app/build-live/page.tsx`. Includes everything from The Build stack + venue + catering + rooftop + in-room presence value. Update page + this line together.
 
-- **Dream outcome:** walking-pace momentum after (or instead of) a sprint. Never
-  stall alone; never re-buy the whole engine to keep moving.
-- **Likelihood levers:** ~5 weekly **Labs** (live group work sessions — unstick
-  + idea), everyone watches, 5 hot seats per Lab worked on active with Will,
-  searchable library by problem taxonomy (Idea → Build → Deploy → Market),
-  community feed between Labs.
-- **Time delay:** ongoing.
-- **Effort:** show up when stuck.
-- **Value stack:**
-  - Weekly Labs (unstick + idea, ~5/wk) — $600/mo
-  - 5 hot-seat picks per Lab — $500/mo
-  - Searchable library organized by problem — $200/mo
-  - Community feed with Will's replies — $300/mo
-  - Same operating environment as paid sprints — $400/mo
-  - **Total: $2,000/mo value → $69/mo (or $500/yr = ~$42/mo).**
-- **Pricing (live on Skool platform):** $69/mo or $500/yr. Annual saves $328/yr.
-- **Trial:** 7-day free trial. Cancel any time inside the trial, no charge.
-  Cancel after, no clawback.
-- **Reason-why-for-price:** $69/mo is the monthly cost to keep the operating
-  engine running at group pace — weekly Labs, hot-seat curation, library
-  maintenance. $500/yr locks the price for a year and saves $328.
-- **Members apply for hot seats** — not first-come. Same selection lens as
-  sprints (§PRD 5–6), 5 per Lab. Hot-seat SLA: applications close Sunday, Will
-  picks by Sunday for the following week's Lab. This is different from the
-  sprint-application ~5-min SLA.
-- **Two 5-caps, do not conflate:** 5 hot seats per Skool Lab (this cap); 5
-  concurrent active paid sprints *per SKU* (that cap, tracked in `lib/slots.ts`).
-- **Position:** not sold cold. Back-end that retains sprint graduates and turns
-  a one-shot buyer into $69/mo (or $500/yr) indefinite. Positioning line:
-  *"Nobody leaves where they came in."*
-- **Entry copy (verbatim, source = Skool about page):** "You have an idea
-  you've never started. Or an app that's half-built and fighting you. Or
-  something you shipped that nobody uses. Stuck to Shipped gets you unstuck —
-  and you feel it the same week."
+### Scarcity
+First 10 seats only at launch price. Real cap (real venue, real day).
 
-*(The founding-20 pricing model was retired 2026-07-09. Skool platform's own
-$69/$500/trial pricing is now live and controls billing.)*
+### Reason-why-for-price
+Same launch pricing as The Build — the venue + catering are absorbed as launch investment. Price goes up after the first 10.
 
-## Referral Program (cross-cutting)
+---
 
-**Both parties get $100 credit.** Open to anyone — Ship Club member, sprint
-grad, first-time visitor. Never expires. Applies once per referred person.
+## 3. Ship Club — Skool, graduates only
 
-- **Mechanism:** `stuck.builders/?ref=CODE` URL → cookie `ref_code` (60 days) →
-  auto-included in application form payload → included in acceptance email.
-- **Referred party** gets $100 off their first Greenfield ($99) or Brownfield
-  ($299), auto-applied at application time.
-- **Referrer** gets $100 credit on their next sprint once the referred party
-  completes their first paid sprint OR their Skool 7-day-trial-to-paid
-  conversion.
-- No leaderboard, no gamification, no expiration. Just a working link, both
-  sides win.
+**URL:** https://www.skool.com/stuck2shipped/about
+**Price:** $499 one-time.
+**Access:** graduates of The Build or The Build LIVE only.
+**Positioning:** where builds compound — post-Build support, playbook exchange, other people running the same OS in different industries.
+**Linked via:** `<CrossLink>` component at the bottom of every page. Not sold on cold traffic.
 
-**Copy (source of truth for `/community`, product pages, and any referral
-landing):**
-> Bring a builder. Both of you get $100 off. They apply with your link, we
-> accept, they pay $99 for a Greenfield or $299 for a Brownfield. When they
-> finish, your next sprint is $100 off. Open to anyone — Ship Club member,
-> sprint grad, first-time visitor. Never expires. Applies once per referred
-> person.
+Ship Club is the back-end of the ladder, not an entry point.
 
-## Setup-to-win operating environment (both sprints + Skool)
+---
 
-Not a Day-7 handoff. The prompts, docs, tools, and skills are the operating
-environment we build **together** from Day 2 on. The customer uses them during
-the sprint, and they persist after. Productize it as much as possible —
-templates, standard prompt packs, standard tool configurations, standard skill
-packs — so Will's time inside a sprint is spent on the customer's specific
-work, not rebuilding the operating environment from scratch each time.
+## 4. Free cheatsheets — `/free`
 
-**Marketing framing:** "you leave inside the operating environment we shipped
-in," not "you leave with a toolkit we hand over."
+**Deliverable:** 3 Claude Code PDFs — shortcuts, slash commands, make Claude yours.
+**Gate:** none. Direct download.
+**Nurture:** optional weekly newsletter opt-in (Friday 8am ET — see `WEEKLY_DROP.md`).
 
-## Delivery style (both sprints)
+Feeds the top of funnel. Never gated behind email for the PDFs themselves.
 
-**They code. Will copilots.** Will guides, demonstrates AI-native moves worth
-watching, and sets up the operating environment, but does not write the
-customer's code for them. Never propose done-for-you positioning, even if it
-would convert better — it breaks the actual delivery model.
+---
 
-**Operator identity:** *"a builder who ships with AI every day, with taste
-about what deserves to be built."* AI-native, not consultant. The AI-native
-half validates capability (Brownfield). The taste half validates judgment
-(Greenfield).
+## Naming + routes cheat sheet
 
-## Apply-first (values, not scarcity theater)
+| Product | Route | Apply URL | Kind | Variant |
+|---|---|---|---|---|
+| The Build | `/build-b` | `/apply?kind=build&variant=build-b` | `build` | `build-b` |
+| The Build LIVE | `/build-live` | `/apply?kind=build&variant=build-live` | `build` | `build-live` |
+| Ship Club | Skool (external) | n/a | n/a | n/a |
+| Free cheatsheets | `/free` | n/a | n/a | n/a |
 
-Sprints are **applied for, not bought**. Two real reasons — not marketing
-pressure:
-
-1. **Real 5-slot/SKU cap.** Will delivers each sprint personally. First
-   accepted, first locked. See PRD §5.
-2. **The four filters (PRD §6).** F1 is a hard line: not illegal / not harmful
-   / not predatory — declined, no exceptions. F2–4 (real problem / beneficial /
-   close to you) are Will's coaching lens, applied with judgment. Filtering
-   before money changes hands is more honest than refunding after.
-
-**Approval SLA: ~5 minutes.** Will reads applications live. Occasional
-exception up to a few hours if Will is inside a Day-1 session — but never a
-full day.
-
-**Fallback condition:** if apply-first proves too slow for ad conversion in
-practice, fall back to pay-first + automatic refund for projects that fail F1
-or that Will declines. Default at launch is apply-first (PRD §5, §10).
-
-## Cross-cutting rules
-
-- **Scarcity:** 5 slots per SKU (5 Greenfield + 5 Brownfield, two independent
-  counters), first-accepted-first-locked. Live slot board on every page
-  rendering both counters, not a single combined bar.
-- **Urgency:** applications reviewed in ~5 minutes (Will reads live). "Apply
-  now, hear back before you close the tab." Next week fills first.
-- **Reason-why for price:** "I only take 5 per sprint kind per week and want
-  them full." Ties price to the cap, not to greed.
-- **Guarantee:** every product has one. Non-negotiable. Written on the page.
-- **Value stacks:** every include line has a dollar anchor. Total > 6× price.
-  All Brownfield hero variants render the SAME value stack.
-- **Proof:** process-proof (calendar screenshots, live slot board, Version Map
-  templates) until real testimonials exist. Then one real testimonial per page,
-  in the price frame. Never fabricate.
-- **Operator identity:** *"a builder who ships with AI every day, with taste
-  about what deserves to be built."*
-
-## Naming
-
-- **Brand:** Stuck to Shipped.
-- **Products:**
-  - Brownfield Build — `/brownfield` (with `#ceiling` and `#traction` hero
-    variants)
-  - Greenfield Build — `/greenfield`
-  - Skool Community — `/community` (Skool URL in `lib/config.ts`)
-- **Root:** `/` redirects to `/brownfield` (primary cold-traffic destination).
-- **Retired URLs (301 redirects):** `/idea` → `/greenfield`, `/out` →
-  `/brownfield#ceiling`, `/grow` → `/brownfield#traction`.
-- Two SKU families (Greenfield + Brownfield) with two Brownfield hero variants
-  for different stuck points. Skool is the community back-end.
-
-## What to change when
-
-- **Price change** → update, in one commit: the page copy, the `<ValueStack>`
-  `price` prop, `lib/config.ts`, PRD.md (§2 ladder + §3 mode), and this doc.
-  LTV number updates in PRD §2 and OFFER §"The Ladder & LTV" only.
-- **New include / bonus** → add a line to `<ValueStack>` with a dollar anchor;
-  keep total > 6× price; reflect in this doc's Products section.
-- **Testimonial arrives** → drop into `Testimonial.tsx` (or the page's price
-  frame above `<ValueStack>`). One per page.
-- **Skool URL change** → `lib/config.ts` only; pages read from there.
-- **Sprint slot count change** → `TopBar` + `SlotBoard` (two counters!) +
-  reason-why line + PRD §5.
-- **Apply-first → pay-first fallback flip** → PRD §5 + §10 + this doc's
-  Apply-first section + form CTAs on every page.
+Legacy routes still resolve (see `docs/FUNNEL.md`).

@@ -101,13 +101,13 @@ export default function CommunityPage() {
               </div>
               <div className="point">
                 <h3>
-                  <span className="from">Delivery</span> <span className="to">→ Your keyboard</span>
+                  <span className="from">Fuse hosted MCP</span> <span className="to">→ Your Claude consults ours</span>
                 </h3>
                 <p>
-                  Same &quot;hands on your keyboard, Will copilots&quot; delivery as the paid sprints — in
-                  group format. You code. Will guides. Never &quot;we build it for you.&quot;
+                  When you get stuck locally, your Claude auto-consults the community skill library —
+                  compounded from every wall this room has cleared. Real-time. Free with membership.
                 </p>
-                <span className="hand">&quot;you ship. i copilot.&quot;</span>
+                <span className="hand">&quot;when you get stuck, your Claude asks ours.&quot;</span>
               </div>
             </div>
           </div>

@@ -46,22 +46,26 @@ $199 GREENFIELD BUILD  →  $399 BROWNFIELD BUILD (core)  →  $69/mo or $500/yr
 - **Who:** "I have an idea to build something of value" / "I have an idea but I'm stuck on how to build it" / "I just learned how to use AI/Bolt but I don't know what to build" / **"I have AI. I still don't know what to build."**
 - **Adversity:** They aren't a builder yet. They need to become one. AI democratized building. Almost nobody can conceive an idea worth building.
 - **Core deliverable — THE IMAGINATIVE SOLUTION.** The imaginative solution is the shape of an idea worth building, developed with Will's taste + judgment across Day 1 background-mining and Days 2–6 of pressure-testing against real people. The PRD, the demo, and the operating environment are **artifacts** of that solution — the delivery vehicle, not the outcome.
-- **Day 1 (~30 min call):** Background-mine — Will interviews *you* on your background, interests, and problems close to you. Pressure-test the idea against the four filters (§6). Begin shaping the imaginative solution.
-- **Days 2–6 (30–60 min daily):** Set up the operating environment together (prompts, docs, tools, skills) and build the AI-native demo of the solution. Hands on the customer's keyboard — Will guides and demonstrates AI-native moves, but the customer does the work.
-- **Day 7 (45 min):** Deliver the **imaginative solution** as: the **PRD** (1–2 pages, spec to build from) + the **built AI-native demo** (link to a running MVP of the solution) + the operating environment they keep + next-3-steps.
-- **Delivery style:** They code, Will copilots. Never done-for-you.
+- **Pre-Day-1 handshake (T-3 to T-2 days — agents automate):** Applicant's agent + Radar reads Q3 background + local transcripts. Drafts proposed imaginative solution shape + PRD skeleton + Day 2–7 plan. Applicant reviews at `stuck.builders/scope/<id>` → approve / edit inline. Will's operator agent reviews. Will taps in ~5 min: Agree · Adjust · Route. Locked PRD skeleton + imaginative solution shape sent back to applicant.
+- **Day 1 (15 min alignment call):** Open the pre-drafted PRD together. Deepen the framing. Four filters cross-checked live. Any red flag → we pivot to the closer, better idea Radar already surfaced. Confirm the agent's Day-2 build brief. Lock.
+- **Nights 2–6 · your agent builds the demo on your machine:** Agent builds the AI-native demo of the imaginative solution on your machine, in your repo. Every commit branch-only. Every taste call flagged for you (naming, UX, design). You wake up to a recap + a set of taste calls to answer.
+- **Mornings 2–6 · planning-mode review · 15 min each:** Review the demo as it takes shape overnight. Answer flagged taste calls. Decide what tonight's brief includes. You direct. Will copilots the orchestration.
+- **Day 7 (30 min):** Deliver the **imaginative solution** as: the **PRD** (1–2 pages, spec to build from) + the **built AI-native demo** (link to a running MVP of the solution) + the operating environment they keep + next-3-steps.
+- **Delivery style:** The customer orchestrates agents that build on their machine, in their repo, under their approvals. Will copilots the orchestration. Never done-for-you.
 - **Guarantee stamp:** `SOLUTION + DEMO / OR REFUND`. If you don't walk away with an imaginative solution you believe is worth building, a working AI-native demo of it, and the operating environment we built together by the Day 7 delivery call — full refund. An honest "don't build this, here's what to build instead" (with the demo as a pivot artifact) still counts as delivery.
 - **Feeds:** the $399 Brownfield Build (they now have something built = qualified) or Skool.
 
 ### 3B. BROWNFIELD BUILD — $399  ← CORE PRODUCT
 - **Who:** "I started building. It's stuck somewhere." Includes Lovable/Bolt/v0/Replit users hitting the ceiling (`/brownfield#ceiling`) and shipped-no-users builders needing traction (`/brownfield#traction`).
 - **Adversity:** Unblock + ship the next version.
-- **Day 1 scoping (~45 min call):** Lock two things: (a) where they're stuck **in their own words** (their language, not our re-framing), (b) what we're building towards. Scope target = **one major feature or one major fix.** No mid-sprint renegotiation.
-- **Days 2–6:** Adaptive daily cadence (rhythm shaped by what the scoped feature/fix needs — SWE judgment on the day-by-day, not a fixed template). Hands on their keyboard, Will copilots. Momentum never stops.
-- **Unstick calls:** up to 5/week, up to 10 min each — when they hit a wall between sessions.
+- **Pre-Day-1 handshake (T-3 to T-2 days — agents automate):** Applicant's agent + Radar reads Q1–Q6 + local transcripts. Drafts proposed Version Map + daily plan. Applicant reviews at `stuck.builders/scope/<id>` → approve / edit inline. Will's operator agent reviews with Radar signals + community MCP wall matches. Will taps in ~5 min: Agree · Adjust · Route. Locked plan sent to applicant + calendar drops.
+- **Day 1 (15 min alignment call):** Open the locked plan together. Confirm scope target in customer's own words (from Q4 of application, pre-drafted). Walk through pre-drafted Version Map + daily plan. Rule stays: one major feature OR one major fix. Confirm the agent's Day-2 brief. Done in 15 min.
+- **Nights 2–6 · your agent ships on your machine:** Agent executes today's plan on your machine, in your repo. Every commit branch-only. Every taste call flagged for you. No unattended prod deploys, no main-branch changes without your tap. You wake up to a recap + a set of taste calls to answer.
+- **Mornings 2–6 · planning-mode review · 15 min each:** Review the agent's overnight recap. Answer flagged taste calls. Decide what tonight's brief includes. You direct. Will copilots the orchestration.
+- **Unstick calls:** up to 5/week, up to 10 min each — when they hit a wall between mornings.
 - **Day 7 (30 min):** Ship review. Demo the deployed app + real URL. Recordings archived + next-version roadmap.
 - **Deliverable:** **Unstuck + deployed live next version at a real URL.** Non-negotiable — every Brownfield Build ships deployed.
-- **Delivery style:** They code, Will copilots. Never done-for-you.
+- **Delivery style:** The customer orchestrates agents that build on their machine, in their repo, under their approvals. Will copilots the orchestration. Never done-for-you.
 - **Feeds:** another Brownfield Build (next version) or Skool.
 
 ---
@@ -153,7 +157,7 @@ Form promise (`.form-hint`): *"Reply in ~5 min — accepted or not. Will reads l
 
 **Marketing honesty (the fix):** each page promises its REAL deliverable. GREENFIELD promises an imaginative solution + PRD + built AI-native demo (MVP-grade), not a production app. BROWNFIELD promises deployed live next version. Skool promises weekly live Labs pace. Never sell "app in 7 days" on the GREENFIELD page, never sell "we build it for you" on any page.
 
-**Operator identity across the site:** *"a builder who ships with AI every day, with taste about what deserves to be built."* AI-native, not consultant. The AI-native half validates capability (Brownfield). The taste half validates judgment (Greenfield).
+**Operator identity across the site:** *"We're builders building with what's next-gen. We show you how to prove — to yourself, your team, your market — that you can engineer and orchestrate real-world agents that ship."*
 
 ---
 
@@ -181,7 +185,7 @@ Form promise (`.form-hint`): *"Reply in ~5 min — accepted or not. Will reads l
 - **Forms:** Tally or Typeform (fast) or custom on the Next.js stack. Application form → review queue (even just an email/Airtable to start).
 - **Slot board honesty:** track two independent counters (5 Greenfield + 5 Brownfield). Update filled/open state as slots fill; a real sold-out counter becomes ad creative.
 - **Domains:** stuck.builders primary (ad landing), stuck2shipped.builders secondary/SEO.
-- **Calendar:** Cal.com, event types = Day 1 Scoping (30 min GREENFIELD / 45 min BROWNFIELD), Daily Session (15–30 min, two daily windows), Unstick Call (10 min), Lab (Skool live).
+- **Calendar:** Cal.com, event types = Day 1 Alignment (15 min GREENFIELD / 15 min BROWNFIELD), Morning Planning-Mode Review (15 min, daily), Unstick Call (10 min), Lab (Skool live).
 - **Prices in code:** `apps/web/lib/config.ts` → `PRICES` map (`idea: 199, build: 399` — internal keys retained; external labels are "Greenfield Build" and "Brownfield Build"). Skool constants: `SKOOL_PRICE_MONTHLY = 69`, `SKOOL_PRICE_ANNUAL = 500`, `SKOOL_TRIAL_DAYS = 7`. `SKOOL_FOUNDING_CAP` retired.
 - **Referral tracking:** `?ref=CODE` URL param → cookie `ref_code` (60 days) → included in application POST payload → included in acceptance email; Will manually generates the discounted Stripe link.
 - **UTM tracking:** application form captures `utm_source`, `utm_campaign`, `utm_content` and includes them in the Meta Pixel Lead event + application email.

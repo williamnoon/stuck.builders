@@ -7,7 +7,7 @@
 
 Skool is the **walking-pace back-end** of the ladder. It exists to retain sprint graduates and steady-pace builders between breakthroughs — not to acquire cold traffic. When a customer finishes a sprint and doesn't need another wall busted yet, the community keeps momentum without the sprint price tag. Name: **"Ship Club"** (working name — `TODO: name` — Will to confirm or replace). Skool is not the front door. The sprint pages are the front door. Skool is where builders land after Day 7 and stay for years.
 
-**One job, two intensities.** Skool runs the same operating engine as the paid sprints (same setup-to-win environment, same "they code, Will copilots" style) — just at group pace with hot-seat allocation instead of dedicated 1-on-1 time.
+**One job, two intensities.** Skool runs the same operating engine as the paid sprints (same setup-to-win environment, same "customer orchestrates agents that build on their machine, Will copilots the orchestration" style) — just at group pace with hot-seat allocation instead of dedicated 1-on-1 time.
 
 ---
 
@@ -35,7 +35,7 @@ Skool is the **walking-pace back-end** of the ladder. It exists to retain sprint
 
 - **Positioning line:** *"Nobody leaves where they came in."*
 - **Sprint upsell inside Skool copy:** *"Need a breakthrough THIS week? Book a private Sprint → stuck.builders"*.
-- **Operator identity:** *"a builder who ships with AI every day, with taste about what deserves to be built."*
+- **Operator identity:** *"We're builders building with what's next-gen. We show you how to prove — to yourself, your team, your market — that you can engineer and orchestrate real-world agents that ship."*
 
 ---
 
@@ -146,7 +146,7 @@ If a week gets busy, the non-negotiables are: **replay drop (Tues)** and **hot-s
 - **No reviving the founding-20 language.** That model was superseded 2026-07-09. Don't reintroduce it as a promo. Skool platform pricing controls.
 - **No pitching community to someone who has an active wall.** Sell them the sprint. Community is for after.
 - **No conflating the two 5-caps.** 5 hot seats per Lab ≠ 5 concurrent paid sprints per SKU. Different products, different mechanics, do not describe together.
-- **No done-for-you positioning inside the community.** "Live with you on your code, your keyboard" — same as the paid sprints. Never "we build it for you."
+- **No done-for-you positioning inside the community.** Members orchestrate their agents live; Will copilots the orchestration — same as the paid sprints. Never "we build it for you."
 - **No conflating sprint SLA with hot-seat SLA.** Sprint applications get a ~5-min reply. Hot-seat applications get selected by Sunday for the following week's Lab. Don't mix them.
 
 ---

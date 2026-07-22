@@ -33,7 +33,7 @@ export const SKOOL_TRIAL_DAYS = 7;
 // judgment (Greenfield — the imaginative-solution deliverable). Both are the
 // whole promise.
 export const OPERATOR_IDENTITY =
-  "a builder who ships with AI every day, with taste about what deserves to be built";
+  "engineering and orchestrating real-world agents that ship";
 
 // External product labels. Internal key -> customer-facing name.
 export const PRODUCT_LABEL: Record<SprintKind, string> = {

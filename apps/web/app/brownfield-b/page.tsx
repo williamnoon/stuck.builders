@@ -7,10 +7,16 @@ import { ApplyCta } from "@/components/ApplyCta";
 import { CrossLink } from "@/components/CrossLink";
 import { Guarantee } from "@/components/Guarantee";
 import { ValueStack } from "@/components/ValueStack";
-import { PRODUCT_TAGLINE, SKOOL_PRICE_ANNUAL, SKOOL_PRICE_MONTHLY, SKOOL_TRIAL_DAYS } from "@/lib/config";
+import {
+  OPERATOR_IDENTITY,
+  PRODUCT_TAGLINE,
+  SKOOL_PRICE_ANNUAL,
+  SKOOL_PRICE_MONTHLY,
+  SKOOL_TRIAL_DAYS,
+} from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Brownfield Build — Your next version deployed at a real URL by Sunday | Stuck to Shipped",
+  title: "Brownfield Build (B) — Agentic speed on your project · Shipped by Sunday | Stuck to Shipped",
   description:
     "Ideate, build, deploy at agentic speed. Your agent ships nights on your machine under your approvals. You direct 15 min/morning. Deployed live URL by Sunday + the muscle to keep shipping at this pace forever. $399. Apply-first, ~5 min reply.",
 };
@@ -24,11 +30,20 @@ function normalizeAngle(a: string | undefined): Angle {
 }
 
 function Hero({ angle }: { angle: Angle }) {
+  const commonMediaBlock = (
+    <>
+      <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 12, flexWrap: "wrap" }}>
+        <Image src="/brownfield.svg" alt="a brown field with an existing partial structure" width={160} height={96} />
+        <span className="hand" style={{ maxWidth: 360 }}>brownfield: {PRODUCT_TAGLINE.build}</span>
+      </div>
+    </>
+  );
+
   if (angle === "ceiling") {
     return (
       <div className="hero wrap">
         <p className="eyebrow">
-          // BROWNFIELD BUILD — off the platform ceiling in 7 days ·{" "}
+          // BROWNFIELD BUILD (B) — off the platform ceiling at agentic speed ·{" "}
           <span className="ok">5 Brownfield slots a week</span>
         </p>
         <h1 className="display">
@@ -39,27 +54,30 @@ function Hero({ angle }: { angle: Angle }) {
               <path d="M10,30 C70,24 130,34 190,26 C240,20 270,30 292,26" fill="none" stroke="#C93A2B" strokeWidth="4" strokeLinecap="round" opacity=".5" />
             </svg>
           </span>{" "}
-          <span className="arrow">→</span> Shipped<br />in 7 days.
+          <span className="arrow">→</span> Shipped<br />overnight.
         </h1>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 12, flexWrap: "wrap" }}>
-          <Image src="/brownfield.svg" alt="a brown field with an existing partial structure" width={160} height={96} />
-          <span className="hand" style={{ maxWidth: 360 }}>brownfield: {PRODUCT_TAGLINE.build}</span>
-        </div>
+        {commonMediaBlock}
 
         <p className="sub">
           You built something real on <strong>Lovable</strong>, <strong>Bolt</strong>, <strong>v0</strong>, or{" "}
-          <strong>Replit</strong>. Then auth broke, or the credits hit $200/mo, or the one feature that matters just
-          won&apos;t take. Every re-prompt breaks two other things. In one week we either{" "}
-          <strong>unblock it inside the platform</strong> or <strong>move the essentials to code you own</strong> —
-          Next.js repo in your GitHub, deployed on Vercel, your custom domain, credits meter stopped. Day 1 decides
-          which path. Day 7 you demo the live URL.
+          <strong>Replit</strong>. Then auth broke, or credits hit $200/mo, or the one feature that matters
+          just won&apos;t take. This week your agent runs the plan on your machine — fix in place, or move
+          the essentials to Next.js on Vercel with your own repo and domain. Pre-Day-1 handshake locks the
+          path. Nights 2–6 your agent executes under your approvals. Mornings 15 min. Day 7 you demo the
+          live URL.
+        </p>
+
+        <p className="hand" style={{ marginTop: 8 }}>
+          &quot;why does auth always break?&quot; ·{" "}
+          &quot;I&apos;m paying $200 a month and still stuck.&quot; ·{" "}
+          &quot;I don&apos;t own this code and it&apos;s starting to feel like a problem.&quot;
         </p>
 
         <ApplyCta
           label="Apply for a slot — $399"
           href="/apply?kind=build"
-          note="Reply in ~5 min. Accepted: Stripe link + Day 1 booking. First-accepted, first-locked."
+          note="Reply in ~5 min. Your agent + Radar drafts scope before Day 1. Day 1 is 15-min alignment."
         />
       </div>
     );
@@ -69,7 +87,7 @@ function Hero({ angle }: { angle: Angle }) {
     return (
       <div className="hero wrap">
         <p className="eyebrow">
-          // BROWNFIELD BUILD — the traction door ·{" "}
+          // BROWNFIELD BUILD (B) — traction at agentic speed ·{" "}
           <span className="ok">5 Brownfield slots a week</span>
         </p>
         <h1 className="display">
@@ -83,25 +101,27 @@ function Hero({ angle }: { angle: Angle }) {
           <span className="arrow">→</span> First users reached<br />in 7 days.
         </h1>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 12, flexWrap: "wrap" }}>
-          <Image src="/brownfield.svg" alt="a brown field with an existing partial structure" width={160} height={96} />
-          <span className="hand" style={{ maxWidth: 360 }}>brownfield: {PRODUCT_TAGLINE.build}</span>
-        </div>
+        {commonMediaBlock}
 
         <p className="sub">
-          The app is live. Nobody&apos;s ever used it. Every week you tell yourself you&apos;ll &quot;do
-          marketing&quot; and every week the tab closes. The next version isn&apos;t a feature — it&apos;s a{" "}
-          <strong>traction step</strong>. Day 1 we lock one traction milestone in your own words (no
-          renegotiation). Days 2–6 you run outreach, tune messaging, and put the landing in front of real people
-          — 15–30 min a day on the screen with me, your keyboard. Up to <strong>5 unstick calls (10 min)</strong>{" "}
-          when you freeze on a DM or a page. Day 7 the milestone is <strong>shipped</strong>: outreach live to
-          5–10 real potential users, one angle proven with their language, first conversation logged.
+          The app is live. Nobody&apos;s ever used it. This week the next version isn&apos;t a feature —
+          it&apos;s a <strong>traction milestone shipped</strong>. Pre-Day-1 your agent + Radar drafts
+          the outreach cohort + messaging plan. Nights 2–6 your agent runs outreach, tunes landing, ships
+          the traction step on your machine. Mornings 15 min you direct. Day 7 the milestone is live:
+          outreach to 5–10 real potential users, one angle proven with their language, first
+          conversation logged.
+        </p>
+
+        <p className="hand" style={{ marginTop: 8 }}>
+          &quot;Nobody&apos;s ever used it.&quot; ·{" "}
+          &quot;I built the whole thing and I don&apos;t even know who it&apos;s for anymore.&quot; ·{" "}
+          &quot;If I don&apos;t get one real user this month I&apos;m shelving it.&quot;
         </p>
 
         <ApplyCta
           label="Apply for a slot — $399"
           href="/apply?kind=build"
-          note="Reply in ~5 min. Accepted: Stripe link + Day 1 booking. First-accepted, first-locked."
+          note="Reply in ~5 min. Your agent + Radar drafts scope before Day 1. Day 1 is 15-min alignment."
         />
       </div>
     );
@@ -110,42 +130,47 @@ function Hero({ angle }: { angle: Angle }) {
   return (
     <div className="hero wrap">
       <p className="eyebrow">
-        // BROWNFIELD BUILD — 7 days on YOUR repo ·{" "}
-        <span className="ok">5 Brownfield slots a week, next Monday start</span>
+        // BROWNFIELD BUILD (B) — agentic speed on your project ·{" "}
+        <span className="ok">5 Brownfield slots a week</span>
       </p>
       <h1 className="display">
         <span className="stuck">
-          Stuck
+          You
           <svg className="scratch" viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true">
             <path d="M4,22 C60,14 90,30 150,20 C210,10 250,28 296,18" fill="none" stroke="#C93A2B" strokeWidth="7" strokeLinecap="round" opacity=".85" />
             <path d="M10,30 C70,24 130,34 190,26 C240,20 270,30 292,26" fill="none" stroke="#C93A2B" strokeWidth="4" strokeLinecap="round" opacity=".5" />
           </svg>
         </span>{" "}
-        <span className="arrow">→</span> Deployed<br />by Sunday.
+        + your agent <span className="arrow">→</span> Deployed<br />by Sunday.
       </h1>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 12, flexWrap: "wrap" }}>
-        <Image src="/brownfield.svg" alt="a brown field with an existing partial structure" width={160} height={96} />
-        <span className="hand" style={{ maxWidth: 360 }}>brownfield: {PRODUCT_TAGLINE.build}</span>
-      </div>
+      {commonMediaBlock}
 
       <p className="sub">
-        One week. Your repo, your keyboard. Day 1 we lock <strong>one major feature or one major fix</strong> — in
-        your own words — as the scope. Then we ship it together in 15–30 minutes a day with{" "}
-        <strong>10-min unstick calls the moment you hit a wall</strong> until you paste a{" "}
-        <strong>real URL into your group chat by Day 7.</strong>
+        One week. Your agent ships nights on your machine — in your repo, under your approvals. Pre-Day-1
+        your Radar + agent drafts a Version Map + daily plan you review and lock. Day 1 we meet 15 min to
+        align, tap, and queue tonight&apos;s brief. Nights 2–6 the agent executes; every commit branch-only,
+        every taste call flagged. Mornings 2–6 we meet 15 min: review, direct, unstick. Sunday you paste the
+        deployed URL. You leave with the shipped next version <em>and</em> the muscle to keep shipping at
+        agentic speed forever.
+      </p>
+
+      <p className="hand" style={{ marginTop: 8 }}>
+        &quot;It broke 3 weeks ago and I still haven&apos;t opened it.&quot; ·{" "}
+        &quot;I know what needs to happen. I can&apos;t get myself to start again.&quot; ·{" "}
+        &quot;One more week of this and I shelve it.&quot;
       </p>
 
       <ApplyCta
         label="Apply for a slot — $399"
         href="/apply?kind=build"
-        note="Reply in ~5 min. Accepted: Stripe link + Day 1 booking. Monday start."
+        note="Reply in ~5 min. Your agent + Radar drafts scope before Day 1. Day 1 is 15-min alignment. Monday start."
       />
     </div>
   );
 }
 
-export default async function BrownfieldPage({ searchParams }: { searchParams: SearchParams }) {
+export default async function BrownfieldBPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const angle = normalizeAngle(params.angle);
 
@@ -157,7 +182,7 @@ export default async function BrownfieldPage({ searchParams }: { searchParams: S
 
         <SlotBoard kind="build" applyHref="/apply?kind=build" />
 
-        {/* WHO IT'S FOR */}
+        {/* WHO IT'S FOR — new for B: agentic speed framing */}
         <section>
           <div className="wrap">
             <p className="sec-label">// WHO THIS IS FOR</p>
@@ -165,49 +190,49 @@ export default async function BrownfieldPage({ searchParams }: { searchParams: S
               You started it.<br />
               <span className="dim">Something got between you and shipped.</span>
             </h2>
-            <span className="sec-hand hand">which one sounds like your last three weekends?</span>
+            <span className="sec-hand hand">this week your agent gets past it — you direct.</span>
             <div className="points">
               <div className="point">
                 <h3>
-                  <span className="from">Half-built</span> <span className="to">→ Merged</span>
+                  <span className="from">Human-pace</span> <span className="to">→ Agent-pace</span>
                 </h3>
                 <p>
-                  The repo exists. Last commit was 18 days ago. This week we open it back up, kill the one bug that
-                  killed the momentum, and merge your next feature by Friday.
+                  You&apos;ve been typing while your agents could ship. This week you drop the typing and
+                  start orchestrating. Agent runs nights on your machine; you direct 15 min mornings.
                 </p>
-                <span className="hand">&quot;it broke 3 weeks ago and I haven&apos;t opened it since&quot;</span>
+                <span className="hand">&quot;I don&apos;t need a class, I need someone shipping with me at pace.&quot;</span>
               </div>
               <div className="point">
                 <h3>
-                  <span className="from">Cursor solo</span> <span className="to">→ Shipping partner</span>
+                  <span className="from">Stalled</span> <span className="to">→ Nightly shipping</span>
                 </h3>
                 <p>
-                  You can code. You ship with AI. You just can&apos;t do another weekend staring at the same file alone
-                  — one focused session a day with someone building alongside you, and it moves again.
+                  Last commit was 18 days ago. This week your agent commits every night to a branch you
+                  approve. Momentum returns because it never stops overnight.
                 </p>
-                <span className="hand">&quot;I don&apos;t need a class, I need someone shipping with me&quot;</span>
+                <span className="hand">&quot;It broke 3 weeks ago and I haven&apos;t opened it since.&quot;</span>
               </div>
               <div className="point">
                 <h3>
                   <span className="from">Local only</span> <span className="to">→ Live URL</span>
                 </h3>
                 <p>
-                  It runs on localhost. Nobody else has ever seen it. By Day 7 it&apos;s deployed, a custom domain is
-                  pointed at it, and the link works when you send it to a stranger.
+                  It runs on localhost. Nobody else has seen it. By Day 7 it&apos;s deployed under your
+                  approval, custom domain pointed, working when you send it to a stranger.
                 </p>
-                <span className="hand">&quot;one more week of this and I&apos;m shelving it&quot;</span>
+                <span className="hand">&quot;one more week of this and I&apos;m shelving it.&quot;</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* THE WEEK */}
+        {/* HOW THE SPRINT RUNS — the corrected model */}
         <section>
           <div className="wrap">
             <p className="sec-label">// HOW THE SPRINT RUNS</p>
             <h2 className="display">
-              Seven days.<br />
-              <span className="dim">Every one has a job.</span>
+              Pre-Day-1 handshake.<br />
+              <span className="dim">Nights your agent ships. Mornings you direct.</span>
             </h2>
             <div className="days">
               <svg className="path-line" viewBox="0 0 22 400" preserveAspectRatio="none" aria-hidden="true">
@@ -253,19 +278,19 @@ export default async function BrownfieldPage({ searchParams }: { searchParams: S
                 </p>
               </div>
               <div className="day">
-                <p className="d">DAY 7 — SHIP REVIEW · 30 MIN</p>
-                <h3>You paste the URL into a group chat while I watch.</h3>
+                <p className="d">DAY 7 · SHIP REVIEW · 30 MIN</p>
+                <h3>You paste the URL. We verify. Roadmap + Skool pitch.</h3>
                 <p>
-                  We demo the deployed app on the real URL. You keep the recording of every session and a written{" "}
-                  <strong>next-3-steps doc</strong> so you know what to open on Monday — the muscle memory of shipping,
-                  not just the win.
+                  We demo the deployed app on the real URL — deployed under your approvals, working,
+                  visitable. You keep every session recording + the operating environment we built together
+                  + a next-version roadmap doc so Monday&apos;s not a blank page.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* PRICE / APPLY */}
+        {/* PRICE / APPLY — corrected value stack for the new model */}
         <section id="book">
           <div className="wrap">
             <p className="sec-label">// CLAIM YOUR SLOT</p>
@@ -279,10 +304,10 @@ export default async function BrownfieldPage({ searchParams }: { searchParams: S
                 </div>
               </div>
               <p className="price-sub">
-                Cheaper than a week of a freelancer. Nothing gets added to it inside the sprint.
+                One week. Agentic speed. Deployed live URL by Sunday under your approvals.
               </p>
               <span className="price-hand hand">
-                one flat price. no retainer, no scope-creep meetings, no &quot;let&apos;s hop on a quick call.&quot;
+                one flat price. no retainer. no scope-creep. no per-hour meter.
               </span>
               <ValueStack
                 items={[
@@ -304,13 +329,13 @@ export default async function BrownfieldPage({ searchParams }: { searchParams: S
               </a>
               <p className="pay-note">
                 Reply in ~5 min · Accepted builders get a payment link (
-                <span className="ok">Cash App Pay</span> or card) + Day 1 booking · First accepted, first locked · Sprint starts Monday
+                <span className="ok">Cash App Pay</span> or card) + Cal.com booking · First-accepted, first-locked · Monday start
               </p>
             </div>
           </div>
         </section>
 
-        {/* GUARANTEE */}
+        {/* GUARANTEE — updated body for the new delivery model */}
         <Guarantee
           stampTop="SHIPPED"
           stampBottom="OR REFUND"
@@ -319,7 +344,7 @@ export default async function BrownfieldPage({ searchParams }: { searchParams: S
           handNote="the only guarantee worth writing is the one you'd honor without being asked."
         />
 
-        {/* FAQ */}
+        {/* FAQ — new for the corrected model */}
         <section className="faq">
           <div className="wrap">
             <p className="sec-label">// QUESTIONS</p>
@@ -367,7 +392,7 @@ export default async function BrownfieldPage({ searchParams }: { searchParams: S
                 Ship Club (<strong>${SKOOL_PRICE_MONTHLY}/mo or ${SKOOL_PRICE_ANNUAL}/yr with a{" "}
                 {SKOOL_TRIAL_DAYS}-day free trial</strong>) is the room where agentic speed compounds.
                 Weekly Labs. Searchable library. Fuse hosted — your Claude auto-consults the community
-                skill library live. <a href="/community">See Ship Club →</a>
+                skill library live. <a href="/community-b">See Ship Club →</a>
               </p>
             </details>
           </div>
@@ -375,23 +400,24 @@ export default async function BrownfieldPage({ searchParams }: { searchParams: S
 
         <div className="signoff">
           <span className="hand">
-            your repo has been closed long enough.<br />open it Monday. deploy it Sunday.
+            you type for years. your agent ships this week.<br />open Monday. deploy Sunday.
             <svg width="220" height="26" viewBox="0 0 220 26" aria-hidden="true">
               <path d="M8,16 C50,8 90,22 130,14 C165,8 195,16 212,12" fill="none" stroke="#128A4B" strokeWidth="3.5" strokeLinecap="round" opacity=".85" />
             </svg>
           </span>
+          <p className="hand" style={{ marginTop: 8 }}>Will — {OPERATOR_IDENTITY}.</p>
         </div>
 
         <CrossLink
           prompt="Idea not conceived yet? Start one rung back —"
-          linkText="Greenfield Build ($199) →"
-          href="/greenfield"
+          linkText="Greenfield Build (B) ($199) →"
+          href="/greenfield-b"
         />
 
         <CrossLink
-          prompt="Between walls, want walking pace?"
-          linkText={`Join our skool stuck2shipped community ($${SKOOL_PRICE_MONTHLY}/mo · ${SKOOL_TRIAL_DAYS}-day free trial) →`}
-          href="/community"
+          prompt="Between walls, want the room where this compounds?"
+          linkText={`Ship Club (B) ($${SKOOL_PRICE_MONTHLY}/mo · ${SKOOL_TRIAL_DAYS}-day free trial) →`}
+          href="/community-b"
         />
       </main>
       <Footer />

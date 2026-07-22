@@ -12,7 +12,7 @@ import { PRODUCT_TAGLINE, SKOOL_PRICE_ANNUAL, SKOOL_PRICE_MONTHLY, SKOOL_TRIAL_D
 export const metadata: Metadata = {
   title: "Greenfield Build — Walk out a builder with a PRD and a working AI-native demo of your idea | Stuck to Shipped",
   description:
-    "Bring a half-idea, no idea, or three you can't pick between. In 7 days we pressure-test the idea and build an AI-native demo of it together — hands on your keyboard, Will copilots. You walk out with the PRD, the demo, and the operating environment to keep shipping. $199. 5 Greenfield slots a week. Apply first.",
+    "AI made anyone able to build. Almost nobody can conceive an idea worth building. This week: your agent + Radar drafts the PRD before Day 1. Nights 2–6 your agent builds the AI-native demo on your machine. Day 1 is 15-min alignment. Day 7 you demo. $199. Apply-first, ~5 min reply.",
 };
 
 export default function GreenfieldPage() {
@@ -62,11 +62,12 @@ export default function GreenfieldPage() {
           </div>
 
           <p className="sub">
-            You don&apos;t need a finished idea to start. Bring a <strong>half-idea</strong>, <strong>no idea</strong>,{" "}
-            or three you can&apos;t pick between. In seven days we mine your background, land on the great idea sitting
-            in your own life, and <strong>build an AI-native demo of it together</strong> — hands on your keyboard, I
-            copilot. You walk out with the <strong>PRD</strong>, the <strong>working demo</strong>, and the operating
-            environment we built together — prompts, docs, tools, skills you keep for every next thing you ship.
+            One week. Your agent conceives + builds the demo of your imaginative solution at agentic speed —
+            on your machine, in your repo, under your approvals. Pre-Day-1 your Radar + agent drafts the PRD
+            skeleton + imaginative solution shape from your background. Day 1 is 15-min alignment. Nights 2–6
+            your agent builds the AI-native demo. Mornings 15 min: you direct + review + confirm the shape.
+            Day 7 you demo + walk out with a working AI-native MVP of your idea + the operating environment
+            to keep shipping at this pace forever.
           </p>
 
           <p className="hand" style={{ marginTop: 8 }}>
@@ -276,7 +277,7 @@ export default function GreenfieldPage() {
                   { strong: "The imaginative solution", label: "— the shape of an idea worth building, developed with Will's taste + judgment", value: "$1,000 value" },
                   { strong: "Day 1 background-mining call + four-filter pressure-test", label: "(30 min, 1:1 with Will)", value: "$400 value" },
                   { strong: "1–2 page PRD documenting the solution", label: "— the spec to build from, yours to keep", value: "$400 value" },
-                  { strong: "Built AI-native demo of the solution", label: "— MVP-grade, running, hands on your keyboard", value: "$600 value" },
+                  { strong: "5 nights of agent building the demo on your machine", label: "— AI-native MVP under your approvals, branch-only", value: "$2,000 value" },
                   { strong: "Operating environment we build together", label: "— prompts, docs, tools, skills you keep for life", value: "$400 value" },
                   { strong: "Next-3-steps handoff", label: "— so Day 8 is a real move, not a blank page", value: "$200 value" },
                 ]}

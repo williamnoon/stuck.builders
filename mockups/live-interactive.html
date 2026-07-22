@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Talk-to-my-AI · interactive preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#F4F1E8;--panel:#FFFFFF;--line:#D8D3C2;--gray:#5A5D53;
+    --gray-dim:#A09E92;--white:#14140F;--green:#128A4B;--green-ink:#0E6E3B;
+    --chalk:#A56A11;--red:#C93A2B;--green-dim:rgba(18,138,75,.10);
+    --shadow-card:0 6px 24px rgba(30,24,10,.08);
+    --shadow-card-lg:0 14px 40px rgba(30,24,10,.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg);color:var(--white);
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:14px;line-height:1.55;
+    padding:32px 16px 80px;min-height:100vh;
+  }
+  h1.page-title{
+    font-family:'Big Shoulders Display',sans-serif;font-weight:800;
+    text-transform:uppercase;font-size:clamp(24px,4vw,36px);
+    letter-spacing:.01em;line-height:1;text-align:center;margin-bottom:6px;
+  }
+  h1.page-title span{color:var(--chalk)}
+  p.page-sub{text-align:center;color:var(--gray);font-size:13px;margin-bottom:8px}
+  p.page-sub .hand{font-family:'Caveat',cursive;font-weight:700;color:var(--chalk);font-size:20px;display:inline-block;transform:rotate(-1deg)}
+  p.demo-note{text-align:center;color:var(--gray-dim);font-size:11px;margin-bottom:24px;letter-spacing:.06em}
+  p.demo-note b{color:var(--chalk)}
+
+  .stage{display:flex;justify-content:center;align-items:flex-start;gap:40px;flex-wrap:wrap;margin-top:16px}
+
+  /* SIDE PANEL — controls / narration */
+  .side{
+    max-width:280px;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:20px;box-shadow:var(--shadow-card);
+    position:sticky;top:20px;
+  }
+  .side h3{
+    font-family:'Big Shoulders Display',sans-serif;font-weight:800;
+    text-transform:uppercase;font-size:17px;margin-bottom:8px;letter-spacing:.03em;
+  }
+  .side .step{
+    padding:10px 12px;margin-bottom:8px;
+    border-left:3px solid var(--line);font-size:12px;color:var(--gray);
+    cursor:pointer;transition:all .15s;line-height:1.4;
+  }
+  .side .step:hover{background:var(--green-dim);border-left-color:var(--green)}
+  .side .step.done{border-left-color:var(--gray-dim);color:var(--gray-dim);text-decoration:line-through}
+  .side .step.active{background:var(--green-dim);border-left-color:var(--green);color:var(--white);font-weight:700}
+  .side .step .num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--chalk);display:block;margin-bottom:2px;letter-spacing:.1em}
+  .side .controls{display:flex;gap:8px;margin-top:14px}
+  .side .controls button{
+    flex:1;background:var(--panel);border:1px solid var(--line);
+    padding:9px;font-family:inherit;font-size:11px;font-weight:700;
+    cursor:pointer;border-radius:6px;color:var(--gray);letter-spacing:.04em;
+  }
+  .side .controls button.primary{background:var(--green);color:#fff;border-color:var(--green)}
+  .side .controls button:hover{border-color:var(--chalk)}
+  .side .hint{
+    margin-top:14px;font-size:11px;color:var(--gray);line-height:1.5;
+    padding:10px 12px;background:var(--green-dim);border-radius:6px;
+  }
+  .side .hint b{color:var(--green-ink)}
+
+  /* PHONE */
+  .phone{
+    width:390px;height:844px;background:#0C0C0B;border-radius:52px;padding:12px;
+    box-shadow:0 30px 60px -20px rgba(30,24,10,.35),0 0 0 2px #1a1a17,0 0 0 4px #0C0C0B;
+    position:relative;flex-shrink:0;
+  }
+  .phone::before{content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0C0C0B;border-radius:20px;z-index:20}
+  .screen{width:100%;height:100%;background:var(--bg);border-radius:42px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .status-bar{height:44px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:12px 32px 0;font-family:-apple-system,'SF Pro Display',sans-serif;font-weight:600;font-size:15px;color:var(--white)}
+
+  .announce{background:#14140F;color:#F3E7CF;text-align:center;font-size:9.5px;letter-spacing:.06em;padding:8px 12px;border-bottom:1.5px solid var(--chalk)}
+  .announce b{color:#F4C56A}
+
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;border-bottom:1px solid var(--line);background:rgba(244,241,232,.9)}
+  .brand{display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.04em}
+  .brand svg{width:16px;height:16px}
+  .brand .dim{color:var(--gray-dim)}
+  .topstatus{font-size:9.5px;color:var(--gray)}
+  .topstatus .live{color:var(--green);font-weight:700}
+  .topstatus .live::before{content:"● "}
+
+  .tabs{display:flex;gap:6px;padding:10px 18px 6px;border-bottom:1px dashed var(--line);background:rgba(244,241,232,.95);z-index:10}
+  .tab{flex:1;padding:9px 6px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:10px 3px 12px 4px / 4px 12px 3px 10px;font-size:10px;font-weight:700;letter-spacing:.06em;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--gray);cursor:pointer;box-shadow:2px 2px 0 rgba(30,24,10,.05)}
+  .tab.active{background:var(--white);color:var(--bg);border-color:var(--white)}
+  .tab .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(18,138,75,.6);animation:pulse 1.8s ease-out infinite}
+  .tab.active .dot{background:#F4C56A}
+  .tab .badge{background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:999px;font-weight:800;min-width:16px}
+  .tab.active .badge{background:#F4C56A;color:#14140F}
+
+  .content{flex:1 1 auto;overflow-y:auto;padding-bottom:80px;position:relative}
+  .content.hidden{display:none}
+
+  /* HERO (only on frame 0) */
+  .hero{padding:16px 20px 10px}
+  .eyebrow{font-size:9.5px;color:var(--gray);letter-spacing:.08em;margin-bottom:6px}
+  .eyebrow .ok{color:var(--green)}
+  h1.hero-title{font-family:'Big Shoulders Display',sans-serif;font-weight:800;text-transform:uppercase;font-size:26px;line-height:.98;letter-spacing:.005em;margin-bottom:6px}
+  h1.hero-title .stuck{color:var(--gray);position:relative;display:inline-block}
+  h1.hero-title .stuck svg.scratch{position:absolute;left:-2%;top:36%;width:104%;height:36%;overflow:visible}
+  h1.hero-title .arrow{color:var(--green)}
+  h1.hero-title .chalk{color:var(--chalk)}
+  .whisper{font-family:'Caveat',cursive;font-weight:700;color:var(--chalk);font-size:16px;transform:rotate(-1deg);display:inline-block;margin:6px 0 4px}
+  .hero-sub{font-size:11px;color:var(--gray);line-height:1.5}
+  .hero-sub b{color:var(--white)}
+
+  /* FEED */
+  .feed{padding:8px 16px 0}
+  .feed-head{display:flex;justify-content:space-between;align-items:center;padding:6px 4px 10px;font-size:9.5px;color:var(--gray);letter-spacing:.08em}
+  .feed-head .live{color:var(--green);font-weight:700}
+  .feed-head .live::before{content:"● "}
+  .event{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:8px;box-shadow:1px 1px 0 rgba(30,24,10,.04);animation:slideIn .4s ease-out}
+  .event.fresh{border-color:rgba(18,138,75,.35);background:var(--green-dim)}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+  .event .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .event .type{font-size:9px;letter-spacing:.12em;color:var(--chalk);font-weight:700;text-transform:uppercase}
+  .event .ago{font-size:9px;color:var(--gray-dim);white-space:nowrap}
+  .event .title{font-size:12px;color:var(--white);margin-top:3px;line-height:1.35}
+  .event .meta{font-size:10px;color:var(--gray);margin-top:3px}
+  .event .meta .saved{color:var(--green-ink);font-weight:700}
+  .event .meta .flag{color:var(--red);font-weight:700}
+  .feed-foot{text-align:center;font-size:14px;color:var(--gray-dim);padding:8px 0 12px;font-family:'Caveat',cursive}
+
+  /* CHAT */
+  .chat-section{border-top:1px dashed var(--line);padding:12px 16px 8px;background:rgba(255,255,255,.4)}
+  .chat-head{font-size:9.5px;letter-spacing:.1em;color:var(--chalk);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+  .msg{margin-bottom:8px;max-width:88%;animation:slideIn .3s ease-out}
+  .msg.user{margin-left:auto;text-align:right}
+  .msg .who{font-size:9px;color:var(--gray-dim);letter-spacing:.08em;margin-bottom:2px;text-transform:uppercase}
+  .msg .bubble{display:inline-block;padding:8px 11px;border-radius:12px;font-size:12px;line-height:1.4;text-align:left}
+  .msg.agent .bubble{background:var(--panel);border:1px solid var(--line);color:var(--white)}
+  .msg.user .bubble{background:var(--green);color:#fff}
+  .msg .bubble b{color:var(--chalk)}
+  .msg.user .bubble b{color:#F4C56A}
+  .msg.typing .bubble{background:var(--panel);border:1px solid var(--line);color:var(--gray-dim);font-style:italic}
+  .msg.typing .bubble::after{content:"...";display:inline-block;animation:typing 1.4s infinite}
+  @keyframes typing{0%{content:"."}33%{content:".."}66%{content:"..."}}
+
+  .artifact{margin-top:6px;background:var(--panel);border:1px dashed var(--chalk);border-radius:6px;padding:9px 11px;animation:slideIn .4s ease-out}
+  .artifact .label{font-size:9px;letter-spacing:.1em;color:var(--chalk);font-weight:700;text-transform:uppercase;margin-bottom:4px}
+  .artifact .body{font-size:11px;color:var(--white);line-height:1.4;font-style:italic}
+
+  .chat-input{display:flex;gap:8px;margin-top:10px}
+  .chat-input textarea{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;font-family:inherit;color:var(--gray);resize:none;height:36px;pointer-events:none}
+  .chat-input button{background:var(--green);color:#fff;border:none;padding:0 16px;font-size:11px;font-weight:700;border-radius:10px 3px 12px 4px / 4px 12px 3px 10px;box-shadow:2px 2px 0 rgba(14,110,59,.35);letter-spacing:.02em;cursor:pointer}
+
+  /* STAGED DASH */
+  .staged-head{padding:14px 16px 4px}
+  .staged-head h3{font-family:'Big Shoulders Display',sans-serif;font-weight:800;text-transform:uppercase;font-size:18px;line-height:1}
+  .staged-head h3 .dim{color:var(--gray)}
+  .staged-head .hand{font-family:'Caveat',cursive;font-weight:700;color:var(--chalk);font-size:15px;transform:rotate(-1deg);display:inline-block;margin-top:4px}
+  .staged{padding:10px 16px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:13px;margin-bottom:12px;box-shadow:var(--shadow-card);position:relative;animation:cardIn .5s ease-out}
+  @keyframes cardIn{from{opacity:0;transform:translateY(10px) rotate(0)}to{opacity:1}}
+  .card:nth-child(1){transform:rotate(-.7deg)}
+  .card:nth-child(2){transform:rotate(.5deg)}
+  .card:nth-child(3){transform:rotate(-.4deg)}
+  .card::before{content:"";position:absolute;top:-8px;left:50%;margin-left:-6px;width:12px;height:12px;border-radius:50%;background:var(--chalk);box-shadow:0 2px 4px rgba(30,24,10,.18)}
+  .card .k{font-size:9px;letter-spacing:.12em;color:var(--chalk);font-weight:700;text-transform:uppercase;margin-bottom:3px}
+  .card h4{font-family:'Big Shoulders Display',sans-serif;font-weight:800;text-transform:uppercase;font-size:15px;letter-spacing:.02em;margin-bottom:4px}
+  .card p{font-size:11px;color:var(--gray);line-height:1.4}
+  .card p strong{color:var(--white)}
+  .card .status{display:inline-block;margin-top:6px;font-size:9.5px;font-weight:700;letter-spacing:.06em;color:var(--chalk)}
+  .card .status.ready{color:var(--green-ink)}
+  .staged-empty{text-align:center;padding:60px 20px;color:var(--gray-dim);font-family:'Caveat',cursive;font-size:20px;transform:rotate(-1deg)}
+
+  .cta-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(244,241,232,.95);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:12px 16px 20px;transform:translateY(100%);transition:transform .4s ease-out}
+  .cta-bar.visible{transform:translateY(0)}
+  .cta-bar a{display:block;text-align:center;background:var(--green);color:#fff;text-decoration:none;padding:12px;font-size:13px;font-weight:800;letter-spacing:.02em;border-radius:12px 4px 14px 5px / 5px 14px 4px 12px;box-shadow:3px 3px 0 rgba(14,110,59,.35)}
+  .cta-bar .sub{text-align:center;font-size:10px;color:var(--gray);margin-top:6px}
+
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(18,138,75,.5)}70%{box-shadow:0 0 0 6px rgba(18,138,75,0)}100%{box-shadow:0 0 0 0 rgba(18,138,75,0)}}
+
+  /* mobile */
+  @media (max-width:900px){
+    .stage{flex-direction:column;gap:24px}
+    .side{position:static;max-width:390px;width:100%}
+    .phone{width:100%;max-width:390px}
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Talk-to-my-AI · <span>interactive preview</span></h1>
+<p class="page-sub"><span class="hand">click through the whole flow — no static frames</span></p>
+<p class="demo-note">tap <b>NEXT</b> on the left panel to advance · <b>RESTART</b> to start over</p>
+
+<div class="stage">
+
+  <!-- CONTROL PANEL -->
+  <div class="side">
+    <h3>Interaction script</h3>
+    <div class="step" id="s0"><span class="num">STEP 0</span>Landing — visitor arrives, feed already streaming</div>
+    <div class="step" id="s1"><span class="num">STEP 1</span>Agent asks about business</div>
+    <div class="step" id="s2"><span class="num">STEP 2</span>Visitor answers "roofing contractor"</div>
+    <div class="step" id="s3"><span class="num">STEP 3</span>Agent asks about tools</div>
+    <div class="step" id="s4"><span class="num">STEP 4</span>Visitor lists their stack</div>
+    <div class="step" id="s5"><span class="num">STEP 5</span>Agent stages system #1 (Lead-Reply)</div>
+    <div class="step" id="s6"><span class="num">STEP 6</span>Visitor asks about quoting</div>
+    <div class="step" id="s7"><span class="num">STEP 7</span>Agent stages system #2 (Quote-Draft)</div>
+    <div class="step" id="s8"><span class="num">STEP 8</span>Agent stages system #3 + close</div>
+    <div class="step" id="s9"><span class="num">STEP 9</span>Visitor switches to YOU tab</div>
+    <div class="controls">
+      <button onclick="prev()">← Back</button>
+      <button class="primary" onclick="next()">Next →</button>
+    </div>
+    <div class="controls">
+      <button onclick="restart()">↻ Restart</button>
+      <button onclick="autoplay()">▶ Autoplay</button>
+    </div>
+    <div class="hint">
+      <b>Watch the live feed</b> keep ticking on the left panel while the conversation on the right stages the visitor's dashboard. The proof arrives passively.
+    </div>
+  </div>
+
+  <!-- PHONE -->
+  <div class="phone"><div class="screen">
+    <div class="status-bar"><span>9:41</span><span>100%</span></div>
+    <div class="announce"><b>// LIFTING THE CURTAIN</b> · Will's AI OS · custom toolkit + 120 skills</div>
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 512 512"><rect width="512" height="512" fill="#0C0C0B"/><rect x="108" y="108" width="150" height="34" fill="#4A4D46"/><rect x="108" y="108" width="34" height="296" fill="#4A4D46"/><rect x="108" y="370" width="150" height="34" fill="#4A4D46"/><rect x="194" y="228" width="158" height="56" fill="#128A4B"/><polygon points="352,152 474,256 352,360" fill="#128A4B"/></svg>
+        stuck<span class="dim">.builders</span>
+      </div>
+      <div class="topstatus"><span class="live">live</span></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" id="tab-os" onclick="switchTab('os')"><span class="dot"></span>WILL'S OS</div>
+      <div class="tab" id="tab-you" onclick="switchTab('you')">YOU <span class="badge" id="you-badge" style="display:none">0</span></div>
+    </div>
+
+    <!-- OS TAB CONTENT -->
+    <div class="content" id="content-os">
+
+      <div class="hero" id="hero-block">
+        <p class="eyebrow">// SEE IT WORK — <span class="ok">my OS · your business next</span></p>
+        <h1 class="hero-title">
+          <span class="stuck">Marketing<svg class="scratch" viewBox="0 0 300 40" preserveAspectRatio="none"><path d="M4,22 C60,14 90,30 150,20 C210,10 250,28 296,18" fill="none" stroke="#C93A2B" stroke-width="7" stroke-linecap="round" opacity=".85"/></svg></span>
+          <span class="arrow">→</span> <span class="chalk">The actual<br/>thing.</span>
+        </h1>
+        <p class="whisper">not a demo · the live system</p>
+        <p class="hero-sub">Watch my AI OS run <b>my business</b> live. Talk to it about yours — it stages <b>your version</b> as we go.</p>
+      </div>
+
+      <div class="feed" id="feed">
+        <div class="feed-head"><span class="live" id="feed-live">live · 2s ago</span><span id="feed-count">127 today</span></div>
+        <!-- events injected via JS -->
+      </div>
+
+      <div class="chat-section">
+        <div class="chat-head">// TALK TO THE OS</div>
+        <div id="chat-log"></div>
+        <div class="chat-input">
+          <textarea placeholder="Your business…" id="chat-input"></textarea>
+          <button onclick="next()">Send →</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- YOU TAB CONTENT -->
+    <div class="content hidden" id="content-you">
+      <div class="staged-head">
+        <h3>Your dashboard.<br/><span class="dim" id="you-tagline">Nothing staged yet.</span></h3>
+        <span class="hand" id="you-hand">answer a couple questions to stage your first system</span>
+      </div>
+      <div class="staged" id="staged">
+        <div class="staged-empty" id="staged-empty">nothing here yet · start the conversation →</div>
+      </div>
+    </div>
+
+    <div class="cta-bar" id="cta-bar">
+      <a href="#">Apply for The Build → $1,995</a>
+      <div class="sub">launch price · first 10 seats only · then it goes up</div>
+    </div>
+  </div></div>
+
+</div>
+
+<script>
+// === SCRIPT DATA ===
+
+const STEPS = [
+  { // 0 — landing
+    events: [
+      { fresh:false, type:'EMAIL DRAFTED', title:'Reply to inbound form · Charleston roofer', ago:'just now', meta:'via lead-reply-agent · <span class="flag">flagged for Will\'s tap</span>' },
+      { fresh:false, type:'SKILL FIRED', title:'Quote-draft · pulled from last 20', ago:'4m ago', meta:'<span class="saved">saved 47m</span> · 1 tap approval pending' },
+      { fresh:false, type:'FOLLOW-UP SENT', title:'Day-3 nudge · 3 open quotes', ago:'12m ago', meta:'auto-templated in Will\'s voice' },
+      { fresh:false, type:'WALL DETECTED', title:'Vercel env missing on staging', ago:'22m ago', meta:'<span class="flag">pinged Will · unblocked in 4m</span>' },
+    ],
+    messages:[
+      { who:'agent', text:'Same OS running Will\'s business on your left. I\'ll ask a few things about yours — then <b>stage your version</b> as we go. What kind of business do you run?' }
+    ],
+    stagedCount:0,
+    hero:true,
+  },
+  { // 1 — agent asks (typing)
+    messages:[
+      { who:'agent', text:'Same OS running Will\'s business on your left. I\'ll ask a few things about yours — then <b>stage your version</b> as we go. What kind of business do you run?' },
+      { who:'user', text:'Roofing contractor in Charleston. 3 crews. Quote follow-up eats my afternoons.' }
+    ],
+    newEvent: { fresh:true, type:'EMAIL DRAFTED', title:'Reply · Bridgeview booking inquiry', ago:'now', meta:'via lead-reply-agent' },
+    stagedCount:0,
+    hero:false,
+  },
+  { // 2 — agent responds
+    messages:[
+      { who:'user', text:'Roofing contractor in Charleston. 3 crews. Quote follow-up eats my afternoons.' },
+      { who:'agent', text:'Got it — <b>roofing contractor</b>, 3 crews, quote follow-up eats 6+ hrs/wk. Which tools are you already paying for? (Gmail? CRM? Xero?)' }
+    ],
+    stagedCount:0,
+    hero:false,
+  },
+  { // 3 — visitor answers tools
+    messages:[
+      { who:'agent', text:'Got it — <b>roofing contractor</b>, 3 crews, quote follow-up eats 6+ hrs/wk. Which tools are you already paying for? (Gmail? CRM? Xero?)' },
+      { who:'user', text:'Gmail, Xero, Google Calendar. No CRM.' }
+    ],
+    newEvent: { fresh:true, type:'SKILL FIRED', title:'Ops summary · yesterday\'s wins', ago:'now', meta:'<span class="saved">saved 22m</span>' },
+    stagedCount:0,
+    hero:false,
+  },
+  { // 4 — agent stages system #1
+    messages:[
+      { who:'user', text:'Gmail, Xero, Google Calendar. No CRM.' },
+      { who:'agent', text:'Perfect — no CRM is fine, Gmail becomes the source of truth. Staging the first system on your dashboard now:', artifact:{ label:'▹ STAGED — LEAD-REPLY AGENT', body:'"Hi {name}, thanks for reaching out about your roof — I saw {details}. I can be out to look this {day} between {slot}. Sound good?" — sends from your Gmail, references your last 20 quotes for tone.' } }
+    ],
+    stagedCount:1,
+    hero:false,
+  },
+  { // 5 — visitor asks about quoting
+    messages:[
+      { who:'agent', text:'Perfect — no CRM is fine, Gmail becomes the source of truth. Staging the first system on your dashboard now:', artifact:{ label:'▹ STAGED — LEAD-REPLY AGENT', body:'"Hi {name}, thanks for reaching out about your roof — I saw {details}. I can be out to look this {day} between {slot}." — sends from your Gmail, references your last 20 quotes for tone.' } },
+      { who:'user', text:'Ok. What about the actual quotes? That\'s the 2hr part.' }
+    ],
+    newEvent: { fresh:true, type:'FOLLOW-UP SENT', title:'Day-7 nudge · lingering quote', ago:'now', meta:'auto-templated' },
+    stagedCount:1,
+    hero:false,
+  },
+  { // 6 — agent stages system #2
+    messages:[
+      { who:'user', text:'Ok. What about the actual quotes? That\'s the 2hr part.' },
+      { who:'agent', text:'That\'s the biggest lift. Here\'s system #2 — pulls from your last 20 quotes to draft in 90 sec:', artifact:{ label:'▹ STAGED — QUOTE-DRAFT COPILOT', body:'You paste photos + notes from the visit. In ~90 sec you get: line-item quote, materials list, labor estimate, and a cover email — all in your pricing and your voice. You edit, hit send.' } }
+    ],
+    stagedCount:2,
+    hero:false,
+  },
+  { // 7 — agent stages system #3 + close
+    messages:[
+      { who:'agent', text:'That\'s the biggest lift. Here\'s system #2 — pulls from your last 20 quotes to draft in 90 sec:', artifact:{ label:'▹ STAGED — QUOTE-DRAFT COPILOT', body:'You paste photos + notes from the visit. In ~90 sec you get: line-item quote, materials list, labor estimate, and a cover email — all in your pricing and your voice.' } },
+      { who:'agent', text:'And #3 — the piece that stops leads dying:', artifact:{ label:'▹ STAGED — FOLLOW-UP SEQUENCER', body:'Every open quote gets a day-3 + day-7 nudge unless you mark it closed or killed. In your voice. You get one weekly digest of what needs your call.' } },
+      { who:'agent', text:'That\'s your dashboard drafted. Same OS I run on mine. <b>Day 1 of The Build is 15 min</b> — we tune what\'s staged, and by Hour 4 yours is live like mine. Tap YOU to see your dashboard →' }
+    ],
+    newEvent: { fresh:true, type:'WEEKLY SUMMARY', title:'Ops rollup · 4 wins, 2 stucks', ago:'now', meta:'<span class="saved">saved 35m</span>' },
+    stagedCount:3,
+    ctaVisible:true,
+    hero:false,
+  },
+  { // 8 — visitor switches to YOU tab
+    switchTo:'you',
+    stagedCount:3,
+    ctaVisible:true,
+    hero:false,
+  },
+];
+
+const STAGED_ITEMS = [
+  { k:'SYSTEM 01 · BUILD FIRST', h4:'Lead-Reply Agent', p:'Every Gmail inquiry gets a <strong>same-day draft in your voice</strong>, pulled from your last 20 replies. You approve, it sends. <strong>Would save ~4h/wk.</strong>', status:'▹ draft ready · install Day 1', ready:true },
+  { k:'SYSTEM 02', h4:'Quote-Draft Copilot', p:'New job description in → drafted quote out in <strong>~90 seconds</strong>. Pulls from your last 20 quotes for pricing + language. <strong>Would save ~6h/wk.</strong>', status:'▹ sketched · install Day 1', ready:true },
+  { k:'SYSTEM 03', h4:'Follow-Up Sequencer', p:'Every open quote gets a <strong>day-3 + day-7 nudge</strong> unless you mark it closed or killed. No more cold leads. <strong>Would save ~3h/wk.</strong>', status:'▹ template ready', ready:false },
+];
+
+// === STATE ===
+let currentStep = 0;
+let currentTab = 'os';
+let autoplayInterval = null;
+
+// === RENDER ===
+function renderStep() {
+  const step = STEPS[currentStep];
+
+  // Update step highlight
+  document.querySelectorAll('.step').forEach((el, i) => {
+    el.classList.remove('active','done');
+    if (i < currentStep + 1) el.classList.add('done');
+    if (i === currentStep + 1) el.classList.add('active');
+  });
+  // handle final step marking
+  if (currentStep >= STEPS.length - 1) {
+    document.querySelectorAll('.step').forEach(el => el.classList.add('done'));
+  }
+
+  // Hero visibility
+  document.getElementById('hero-block').style.display = step.hero ? 'block' : 'none';
+
+  // Feed events
+  const feed = document.getElementById('feed');
+  // Clear old events (keep head)
+  Array.from(feed.querySelectorAll('.event, .feed-foot')).forEach(el => el.remove());
+
+  // Collect all events up to this step
+  let allEvents = [];
+  if (STEPS[0].events) allEvents = [...STEPS[0].events];
+  for (let i=1; i<=currentStep; i++) {
+    if (STEPS[i] && STEPS[i].newEvent) allEvents.unshift(STEPS[i].newEvent);
+  }
+  // Reset "fresh" flag: only the top one stays fresh
+  allEvents = allEvents.map((e, i) => ({...e, fresh: i === 0 && currentStep > 0}));
+
+  allEvents.slice(0, 6).forEach(ev => {
+    const div = document.createElement('div');
+    div.className = 'event' + (ev.fresh ? ' fresh' : '');
+    div.innerHTML = `
+      <div class="row"><span class="type">${ev.type}</span><span class="ago">${ev.ago}</span></div>
+      <div class="title">${ev.title}</div>
+      <div class="meta">${ev.meta}</div>
+    `;
+    feed.appendChild(div);
+  });
+
+  const foot = document.createElement('div');
+  foot.className = 'feed-foot';
+  foot.textContent = `↓ ${127 - allEvents.length} more today`;
+  feed.appendChild(foot);
+
+  // Chat log
+  const chat = document.getElementById('chat-log');
+  chat.innerHTML = '';
+  const msgs = step.messages || [];
+  msgs.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'msg ' + m.who;
+    let html = `<div class="who">${m.who}</div><div class="bubble">${m.text}</div>`;
+    if (m.artifact) {
+      html += `<div class="artifact"><div class="label">${m.artifact.label}</div><div class="body">${m.artifact.body}</div></div>`;
+    }
+    div.innerHTML = html;
+    chat.appendChild(div);
+  });
+  chat.scrollTop = chat.scrollHeight;
+
+  // Staged dashboard
+  const staged = document.getElementById('staged');
+  const emptyEl = document.getElementById('staged-empty');
+  const badge = document.getElementById('you-badge');
+  const count = step.stagedCount || 0;
+
+  if (count === 0) {
+    staged.innerHTML = '<div class="staged-empty">nothing here yet · start the conversation →</div>';
+    badge.style.display = 'none';
+    document.getElementById('you-tagline').textContent = 'Nothing staged yet.';
+    document.getElementById('you-hand').textContent = 'answer a couple questions to stage your first system';
+  } else {
+    staged.innerHTML = '';
+    STAGED_ITEMS.slice(0, count).forEach(it => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `
+        <div class="k">${it.k}</div>
+        <h4>${it.h4}</h4>
+        <p>${it.p}</p>
+        <span class="status ${it.ready ? 'ready' : ''}">${it.status}</span>
+      `;
+      staged.appendChild(div);
+    });
+    badge.style.display = 'inline-block';
+    badge.textContent = count;
+    document.getElementById('you-tagline').innerHTML = count === 3 ? 'Drafted. Ready to install.' : 'Drafting in real time...';
+    document.getElementById('you-hand').textContent = count === 3 ? 'same OS as Will\'s — waiting for you to flip it on' : `${count} of 3 systems staged so far`;
+  }
+
+  // CTA bar
+  document.getElementById('cta-bar').classList.toggle('visible', !!step.ctaVisible);
+
+  // Auto tab switch
+  if (step.switchTo) {
+    switchTab(step.switchTo);
+  }
+
+  // Input placeholder mirror
+  const nextStep = STEPS[currentStep + 1];
+  if (nextStep && nextStep.messages) {
+    const nextUser = nextStep.messages.find(m => m.who === 'user' && !msgs.some(existing => existing.text === m.text));
+    document.getElementById('chat-input').placeholder = nextUser ? nextUser.text.slice(0, 50) + '...' : 'Your business…';
+  }
+}
+
+function next() {
+  if (currentStep < STEPS.length - 1) {
+    currentStep++;
+    renderStep();
+  }
+}
+function prev() {
+  if (currentStep > 0) {
+    currentStep--;
+    stopAutoplay();
+    renderStep();
+  }
+}
+function restart() {
+  currentStep = 0;
+  currentTab = 'os';
+  switchTab('os');
+  stopAutoplay();
+  renderStep();
+}
+function switchTab(t) {
+  currentTab = t;
+  document.getElementById('tab-os').classList.toggle('active', t === 'os');
+  document.getElementById('tab-you').classList.toggle('active', t === 'you');
+  document.getElementById('content-os').classList.toggle('hidden', t !== 'os');
+  document.getElementById('content-you').classList.toggle('hidden', t !== 'you');
+}
+function autoplay() {
+  if (autoplayInterval) { stopAutoplay(); return; }
+  autoplayInterval = setInterval(() => {
+    if (currentStep < STEPS.length - 1) next();
+    else stopAutoplay();
+  }, 2200);
+}
+function stopAutoplay() {
+  if (autoplayInterval) { clearInterval(autoplayInterval); autoplayInterval = null; }
+}
+
+// Initial render
+renderStep();
+</script>
+
+</body>
+</html>

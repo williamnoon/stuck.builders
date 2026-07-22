@@ -1,0 +1,6 @@
+{
+  "name": "jarvis",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Will's second-brain standup agent — surfaces cross-project state, proposes moves. Instructions + skills only; runtime lives in apps/web/app/api/jarvis."
+}
