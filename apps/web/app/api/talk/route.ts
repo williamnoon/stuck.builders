@@ -338,5 +338,35 @@ export async function POST(req: Request) {
     },
   });
 
-  return result.toDataStreamResponse();
+  return result.toDataStreamResponse({
+    // AI SDK v4 defaults to masking errors as "An error occurred." with NO
+    // server-side log. That makes prod failures invisible. Log the real error
+    // here (goes to Vercel runtime logs) AND surface a short type hint to the
+    // client so we can distinguish "config problem" from "provider outage"
+    // without leaking secrets.
+    getErrorMessage: (err: unknown) => {
+      const message = err instanceof Error ? err.message : String(err);
+      const name = err instanceof Error ? err.name : "UnknownError";
+      const isAuth =
+        /api key|unauthori[sz]ed|401|authentication/i.test(message) ||
+        !process.env.ANTHROPIC_API_KEY;
+      const isRate = /rate limit|429|quota/i.test(message);
+      const isNet = /fetch failed|ENOTFOUND|ECONN|timeout/i.test(message);
+
+      console.error("[talk] streamText error:", {
+        name,
+        message,
+        isAuth,
+        isRate,
+        isNet,
+        hasApiKey: Boolean(process.env.ANTHROPIC_API_KEY),
+        hasSiteUrl: Boolean(process.env.NEXT_PUBLIC_SITE_URL),
+      });
+
+      if (isAuth) return "Config error: agent credentials missing or invalid.";
+      if (isRate) return "Rate limit hit — try again in a minute.";
+      if (isNet) return "Network hiccup reaching the model — try again.";
+      return `Agent error (${name}) — check server logs.`;
+    },
+  });
 }
