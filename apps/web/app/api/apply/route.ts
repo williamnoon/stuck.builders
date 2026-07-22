@@ -20,13 +20,34 @@ type ApplyPayload = {
   ack: boolean;
   refCode?: string;
   utm?: Record<string, string>;
+  talkNotesToWill?: string;
+  talkSummary?: string;
 };
+
+type FlaggedField =
+  | "email"
+  | "phone"
+  | "name"
+  | "stuck"
+  | "shipped"
+  | "projectText"
+  | "aboutYou"
+  | "ack"
+  | "q1"
+  | null;
+
+type ParseError = { error: string; flaggedField: FlaggedField };
+type ParseResult =
+  | { ok: true; payload: ApplyPayload }
+  | { ok: false; error: ParseError };
 
 const VARIANT_LABEL: Record<ApplyVariant, string> = {
   "build-b": "The Build — virtual 1:1 · 4hr · $1,995 launch / $2,995 reg",
   "build-live": "The Build LIVE — 1:1 in-person · Fri Sep 11 2026 · Charleston · $1,995 launch / $5,995 reg",
   legacy: "Legacy Sprint (Greenfield / Brownfield)",
 };
+
+const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 function isString(v: unknown): v is string {
   return typeof v === "string";
@@ -41,31 +62,119 @@ function normalizeVariant(v: unknown): ApplyVariant {
   return "legacy";
 }
 
-function parsePayload(body: unknown): ApplyPayload | null {
-  if (!body || typeof body !== "object") return null;
+function phoneDigits(raw: string): string {
+  return raw.replace(/^\+/, "").replace(/\D/g, "");
+}
+
+function isPlaceholder555(raw: string, digits: string): boolean {
+  // digits-only: match 555 area code (US, with or without leading 1)
+  if (/^1?555\d{7}$/.test(digits)) return true;
+  // raw input containing "555-" in the area-code position
+  // e.g. "(555)-", "555-", "+1 555-", " 555-"
+  if (/(^|[^\d])555-/.test(raw)) return true;
+  return false;
+}
+
+function parsePayload(body: unknown): ParseResult {
+  if (!body || typeof body !== "object") {
+    return { ok: false, error: { error: "Invalid request body.", flaggedField: null } };
+  }
   const b = body as Record<string, unknown>;
-  if (!isSprintKind(b.sprintKind)) return null;
-  if (!isString(b.q1Label) || !b.q1Label.trim()) return null;
-  if (!isString(b.q1Price)) return null;
-  if (!isString(b.projectText) && !isString(b.projectUrl)) return null;
-  if (!isString(b.stuck) || !b.stuck.trim()) return null;
-  if (!isString(b.shipped) || !b.shipped.trim()) return null;
-  if (!isString(b.name) || !b.name.trim()) return null;
-  if (!isString(b.email) || !b.email.trim()) return null;
-  const phone = isString(b.phone) ? b.phone.trim().slice(0, 40) : "";
-  const isNewOffer = b.variant === "build-b" || b.variant === "build-live";
-  if (isNewOffer && phone.replace(/\D/g, "").length < 7) return null;
-  if (typeof b.ack !== "boolean" || !b.ack) return null;
+
+  if (!isSprintKind(b.sprintKind)) {
+    return { ok: false, error: { error: "Pick where you are — idea or build.", flaggedField: "q1" } };
+  }
+  if (!isString(b.q1Label) || !b.q1Label.trim()) {
+    return { ok: false, error: { error: "Pick where you are — idea or build.", flaggedField: "q1" } };
+  }
+  if (!isString(b.q1Price)) {
+    return { ok: false, error: { error: "Invalid request body.", flaggedField: null } };
+  }
 
   const projectText = isString(b.projectText) ? b.projectText : "";
   const projectUrl = isString(b.projectUrl) ? b.projectUrl : "";
-  if (!projectText.trim() && !projectUrl.trim()) return null;
+  if (!projectText.trim() && !projectUrl.trim()) {
+    return {
+      ok: false,
+      error: { error: "Q2 needs something — a couple sentences or a link.", flaggedField: "projectText" },
+    };
+  }
 
   const aboutYou = isString(b.aboutYou) ? b.aboutYou : "";
-  if (b.sprintKind === "idea" && !aboutYou.trim()) return null;
+  if (b.sprintKind === "idea" && !aboutYou.trim()) {
+    return {
+      ok: false,
+      error: { error: "Q3 matters on the idea path — a couple lines on you is enough.", flaggedField: "aboutYou" },
+    };
+  }
 
-  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(b.email.trim());
-  if (!emailOk) return null;
+  if (!isString(b.stuck) || !b.stuck.trim()) {
+    return {
+      ok: false,
+      error: { error: "Q4 — name the wall. Two sentences beats none.", flaggedField: "stuck" },
+    };
+  }
+  if (!isString(b.shipped) || !b.shipped.trim()) {
+    return {
+      ok: false,
+      error: { error: "Q5 — name what Day 7 looks like.", flaggedField: "shipped" },
+    };
+  }
+  if (!isString(b.name) || !b.name.trim()) {
+    return { ok: false, error: { error: "Need your name to reply to you.", flaggedField: "name" } };
+  }
+  if (!isString(b.email) || !b.email.trim()) {
+    return {
+      ok: false,
+      error: { error: "Need your email — that's where the reply goes.", flaggedField: "email" },
+    };
+  }
+  if (!EMAIL_RE.test(b.email.trim())) {
+    return {
+      ok: false,
+      error: { error: "That email looks off — double-check it.", flaggedField: "email" },
+    };
+  }
+
+  const phoneRaw = isString(b.phone) ? b.phone.trim().slice(0, 40) : "";
+  const digits = phoneDigits(phoneRaw);
+  const isNewOffer = b.variant === "build-b" || b.variant === "build-live";
+
+  if (phoneRaw || isNewOffer) {
+    if (isPlaceholder555(phoneRaw, digits)) {
+      return {
+        ok: false,
+        error: {
+          error: "That's a placeholder area code — enter your real number.",
+          flaggedField: "phone",
+        },
+      };
+    }
+    if (digits.length < 7) {
+      return {
+        ok: false,
+        error: {
+          error: isNewOffer
+            ? "Need a phone number — that's where the onboarding call comes in."
+            : "That phone number looks short — double-check it.",
+          flaggedField: "phone",
+        },
+      };
+    }
+    if (digits.length > 15) {
+      return {
+        ok: false,
+        error: { error: "That phone number looks too long.", flaggedField: "phone" },
+      };
+    }
+  }
+
+  if (typeof b.ack !== "boolean" || !b.ack) {
+    return {
+      ok: false,
+      error: { error: "One box left — the legal/non-harmful line at the bottom.", flaggedField: "ack" },
+    };
+  }
 
   const refCode = isString(b.refCode) && b.refCode.trim() ? b.refCode.trim().slice(0, 64) : undefined;
   let utm: Record<string, string> | undefined;
@@ -77,22 +186,36 @@ function parsePayload(body: unknown): ApplyPayload | null {
     if (Object.keys(cleaned).length) utm = cleaned;
   }
 
+  const talkNotesToWill =
+    isString(b.talkNotesToWill) && b.talkNotesToWill.trim()
+      ? b.talkNotesToWill.trim().slice(0, 2000)
+      : undefined;
+  const talkSummary =
+    isString(b.talkSummary) && b.talkSummary.trim()
+      ? b.talkSummary.trim().slice(0, 400)
+      : undefined;
+
   return {
-    sprintKind: b.sprintKind,
-    q1Label: b.q1Label,
-    q1Price: b.q1Price,
-    variant: normalizeVariant(b.variant),
-    projectText,
-    projectUrl,
-    aboutYou,
-    stuck: b.stuck,
-    shipped: b.shipped,
-    name: b.name,
-    email: b.email,
-    phone,
-    ack: b.ack,
-    refCode,
-    utm,
+    ok: true,
+    payload: {
+      sprintKind: b.sprintKind,
+      q1Label: b.q1Label,
+      q1Price: b.q1Price,
+      variant: normalizeVariant(b.variant),
+      projectText,
+      projectUrl,
+      aboutYou,
+      stuck: b.stuck,
+      shipped: b.shipped,
+      name: b.name,
+      email: b.email,
+      phone: phoneRaw,
+      ack: b.ack,
+      refCode,
+      utm,
+      talkNotesToWill,
+      talkSummary,
+    },
   };
 }
 
@@ -146,10 +269,23 @@ function buildHtml(p: ApplyPayload, submittedAt: string): string {
     )
     .join("");
 
+  const talkBlock =
+    p.talkNotesToWill || p.talkSummary
+      ? `
+  <div style="background:#FFF7E5;border-left:4px solid #A56A11;padding:14px 16px;margin:0 0 18px;">
+    <div style="font-size:11px;letter-spacing:.1em;color:#A56A11;font-weight:700;text-transform:uppercase;margin-bottom:6px;">
+      Notes from /talk agent (read before the call)
+    </div>
+    ${p.talkSummary ? `<div style="font-size:13px;color:#111;margin-bottom:6px;"><strong>${escapeHtml(p.talkSummary)}</strong></div>` : ""}
+    ${p.talkNotesToWill ? `<div style="font-size:13px;color:#333;white-space:pre-wrap;line-height:1.5;">${escapeHtml(p.talkNotesToWill)}</div>` : ""}
+  </div>`
+      : "";
+
   return `<!doctype html>
 <html><body style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#111;">
   <h2 style="margin:0 0 12px;">New application — ${escapeHtml(VARIANT_LABEL[p.variant])}</h2>
   <p style="margin:0 0 16px;color:#555;">${escapeHtml(p.name)} &lt;${escapeHtml(p.email)}&gt;</p>
+  ${talkBlock}
   <table style="border-collapse:collapse;width:100%;max-width:720px;">${body}</table>
 </body></html>`;
 }
@@ -159,16 +295,17 @@ export async function POST(req: Request) {
   try {
     raw = await req.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+    return NextResponse.json({ error: "Invalid JSON body.", flaggedField: null }, { status: 400 });
   }
 
-  const payload = parsePayload(raw);
-  if (!payload) {
+  const parsed = parsePayload(raw);
+  if (!parsed.ok) {
     return NextResponse.json(
-      { error: "Missing or invalid fields. Please fill in all required questions." },
+      { error: parsed.error.error, flaggedField: parsed.error.flaggedField },
       { status: 400 },
     );
   }
+  const payload = parsed.payload;
 
   const submittedAt = new Date().toISOString();
   const subject = `[stuck.builders] New application — ${payload.name} — ${VARIANT_LABEL[payload.variant]}`;
@@ -178,13 +315,8 @@ export async function POST(req: Request) {
   const toRaw = process.env.APPLICATIONS_EMAIL;
   const fromRaw = process.env.APPLICATIONS_FROM_EMAIL ?? "will@stuck.builders";
 
-  // `from` must be a single address. Defensive: if the env var got a
-  // comma-separated list by mistake, take the first entry so we don't
-  // silently fail all sends.
   const from = fromRaw.split(",")[0]!.trim();
 
-  // Support comma-separated APPLICATIONS_EMAIL for multi-recipient delivery
-  // (e.g. "will@stuck.builders,williamdeval@gmail.com").
   const to = toRaw
     ? toRaw.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
@@ -212,7 +344,7 @@ export async function POST(req: Request) {
     if (result.error) {
       console.error("[apply] Resend error:", result.error);
       return NextResponse.json(
-        { error: "Could not send. Please email will@stuck.builders directly." },
+        { error: "Could not send. Please email will@stuck.builders directly.", flaggedField: null },
         { status: 500 },
       );
     }
@@ -220,7 +352,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("[apply] Resend threw:", err);
     return NextResponse.json(
-      { error: "Could not send. Please email will@stuck.builders directly." },
+      { error: "Could not send. Please email will@stuck.builders directly.", flaggedField: null },
       { status: 500 },
     );
   }

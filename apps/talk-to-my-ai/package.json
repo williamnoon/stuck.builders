@@ -1,0 +1,15 @@
+{
+  "name": "talk-to-my-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "stuck.builders live agent — qualifies visitors and stages their personal AI-OS dashboard",
+  "type": "module",
+  "scripts": {
+    "dev": "eve dev",
+    "deploy": "vercel deploy"
+  },
+  "dependencies": {
+    "eve": "latest",
+    "zod": "^3.23.0"
+  }
+}

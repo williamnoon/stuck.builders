@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^1.2.12",
+    "@ai-sdk/react": "^1.2.12",
+    "ai": "^4.3.19",
     "next": "15.1.11",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "resend": "^4.1.2"
+    "resend": "^4.1.2",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",

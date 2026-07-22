@@ -126,8 +126,13 @@ export function ApplicationForm({
   const [phone, setPhone] = useState("");
   const [ack, setAck] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [fieldWarnings, setFieldWarnings] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [refCode, setRefCode] = useState<string>("");
+  const [talkNotesToWill, setTalkNotesToWill] = useState<string>("");
+  const [talkSummary, setTalkSummary] = useState<string>("");
+  const [prefilled, setPrefilled] = useState(false);
 
   useEffect(() => {
     const cookieRef = readCookie(REFERRAL_COOKIE_NAME);
@@ -138,35 +143,161 @@ export function ApplicationForm({
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.localStorage.getItem("talk:prefill:v1");
+      if (!raw) return;
+      const p = JSON.parse(raw) as {
+        savedAt?: number;
+        email?: string;
+        name?: string;
+        phone?: string;
+        website?: string;
+        notesToWill?: string;
+        summary?: string;
+        suggestedFormFill?: {
+          projectText?: string;
+          stuck?: string;
+          shipped?: string;
+        };
+      };
+      if (!p.savedAt || Date.now() - p.savedAt > 60 * 60 * 1000) {
+        window.localStorage.removeItem("talk:prefill:v1");
+        return;
+      }
+      let didFill = false;
+      if (p.suggestedFormFill?.projectText) {
+        setProjectText(p.suggestedFormFill.projectText);
+        didFill = true;
+      }
+      if (p.suggestedFormFill?.stuck) {
+        setStuck(p.suggestedFormFill.stuck);
+        didFill = true;
+      }
+      if (p.suggestedFormFill?.shipped) {
+        setShipped(p.suggestedFormFill.shipped);
+        didFill = true;
+      }
+      if (p.email) {
+        setEmail(p.email);
+        didFill = true;
+      }
+      if (p.name) {
+        setName(p.name);
+        didFill = true;
+      }
+      if (p.phone) {
+        setPhone(p.phone);
+        didFill = true;
+      }
+      if (p.website) {
+        setProjectUrl(p.website);
+        didFill = true;
+      }
+      if (p.notesToWill) setTalkNotesToWill(p.notesToWill);
+      if (p.summary) setTalkSummary(p.summary);
+      if (didFill || p.notesToWill) setPrefilled(true);
+    } catch {
+      // corrupted storage — ignore
+    }
+  }, []);
+
   const q1 = Q1_OPTIONS[q1Index];
   const isIdeaPath = !isNewOffer && q1.value === "idea";
 
-  function validate(): string | null {
-    if (!isNewOffer && !q1) return "Pick where you are — idea or build.";
+  const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  function emailWarning(raw: string): string | null {
+    const v = raw.trim().toLowerCase();
+    if (!v) return null;
+    const typoMap: Array<[RegExp, string, string]> = [
+      [/\.con$/, ".con", ".com"],
+      [/\.cmo$/, ".cmo", ".com"],
+      [/\.co,$/, ".co,", ".com"],
+      [/gmial\.com$/, "gmial.com", "gmail.com"],
+      [/gnail\.com$/, "gnail.com", "gmail.com"],
+    ];
+    for (const [re, bad, good] of typoMap) {
+      if (re.test(v)) {
+        const suggested = v.replace(bad, good);
+        return `Did you mean ${suggested}?`;
+      }
+    }
+    return null;
+  }
+
+  function phoneDigitsOnly(raw: string): string {
+    return raw.replace(/^\+/, "").replace(/\D/g, "");
+  }
+
+  function isPlaceholder555(raw: string, digits: string): boolean {
+    if (/^1?555\d{7}$/.test(digits)) return true;
+    if (/(^|[^\d])555-/.test(raw)) return true;
+    return false;
+  }
+
+  function validateEmail(raw: string): string | null {
+    const v = raw.trim();
+    if (!v) return "Need your email — that's where the reply goes.";
+    if (!EMAIL_RE.test(v)) return "That email looks off — double-check it.";
+    return null;
+  }
+
+  function validatePhone(raw: string, required: boolean): string | null {
+    const trimmed = raw.trim();
+    if (!trimmed) {
+      return required ? "Need a phone number — that's where the onboarding call comes in." : null;
+    }
+    const digits = phoneDigitsOnly(trimmed);
+    if (isPlaceholder555(trimmed, digits)) {
+      return "That's a placeholder area code — enter your real number.";
+    }
+    if (digits.length < 7) {
+      return required
+        ? "Need a phone number — that's where the onboarding call comes in."
+        : "That phone number looks short — double-check it.";
+    }
+    if (digits.length > 15) return "That phone number looks too long.";
+    return null;
+  }
+
+  function validateAll(): { errors: Record<string, string>; firstField: string | null } {
+    const errs: Record<string, string> = {};
+    const order: string[] = [];
     if (!projectText.trim() && !projectUrl.trim()) {
-      return isNewOffer
+      errs.projectText = isNewOffer
         ? "Q2 needs something — a couple sentences on your business, or a link. Either works."
         : "Q2 needs something — a few sentences or a link. Either works.";
+      order.push("projectText");
     }
     if (isIdeaPath && !aboutYou.trim()) {
-      return "Q3 matters on the idea path — a couple lines on you is enough.";
+      errs.aboutYou = "Q3 matters on the idea path — a couple lines on you is enough.";
+      order.push("aboutYou");
     }
     if (!stuck.trim()) {
-      return isNewOffer
+      errs.stuck = isNewOffer
         ? "Q4 — name the thing eating your time. Two sentences beats none."
         : "Q4 — name the wall. Two sentences beats none.";
+      order.push("stuck");
     }
-    if (!shipped.trim()) return copy.q5Error;
-    if (!name.trim()) return "Need your name to reply to you.";
-    if (!email.trim()) return "Need your email — that's where the reply goes.";
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-    if (!emailOk) return "That email looks off — double-check it.";
-    const phoneDigits = phone.replace(/\D/g, "");
-    if (isNewOffer && phoneDigits.length < 7) {
-      return "Need a phone number — that's where the onboarding call comes in.";
+    if (!shipped.trim()) {
+      errs.shipped = copy.q5Error;
+      order.push("shipped");
     }
-    if (phone.trim() && phoneDigits.length < 7) {
-      return "That phone number looks short — double-check it.";
+    if (!name.trim()) {
+      errs.name = "Need your name to reply to you.";
+      order.push("name");
+    }
+    const emailErr = validateEmail(email);
+    if (emailErr) {
+      errs.email = emailErr;
+      order.push("email");
+    }
+    const phoneErr = validatePhone(phone, isNewOffer);
+    if (phoneErr) {
+      errs.phone = phoneErr;
+      order.push("phone");
     }
     if (projectUrl.trim()) {
       try {
@@ -175,19 +306,32 @@ export function ApplicationForm({
           : `https://${projectUrl.trim()}`;
         new URL(candidate);
       } catch {
-        return "That link isn't parsing as a URL — paste it again.";
+        errs.projectUrl = "That link isn't parsing as a URL — paste it again.";
+        order.push("projectUrl");
       }
     }
-    if (!ack) return "One box left — the legal/non-harmful line at the bottom.";
-    return null;
+    if (!ack) {
+      errs.ack = "One box left — the legal/non-harmful line at the bottom.";
+      order.push("ack");
+    }
+    return { errors: errs, firstField: order[0] ?? null };
   }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
-    const v = validate();
-    if (v) {
-      setError(v);
+    const { errors, firstField } = validateAll();
+    setFieldErrors(errors);
+    if (firstField) {
+      if (typeof document !== "undefined") {
+        const el = document.getElementById(firstField);
+        if (el && typeof el.scrollIntoView === "function") {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          if (typeof (el as HTMLElement).focus === "function") {
+            (el as HTMLElement).focus({ preventScroll: true });
+          }
+        }
+      }
       return;
     }
     setSubmitting(true);
@@ -216,6 +360,8 @@ export function ApplicationForm({
       ack,
       refCode: refCode || undefined,
       utm: Object.keys(utm).length ? utm : undefined,
+      talkNotesToWill: talkNotesToWill || undefined,
+      talkSummary: talkSummary || undefined,
     };
     try {
       const res = await fetch("/api/apply", {
@@ -223,12 +369,27 @@ export function ApplicationForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const data: { ok?: boolean; error?: string } = await res.json().catch(() => ({}));
+      const data: { ok?: boolean; error?: string; flaggedField?: string | null } = await res
+        .json()
+        .catch(() => ({}));
       if (!res.ok || !data.ok) {
-        setError(
+        const msg =
           data.error ??
-            "Something broke on our end. Email will@stuck.builders and we'll take it from there.",
-        );
+          "Something broke on our end. Email will@stuck.builders and we'll take it from there.";
+        if (data.flaggedField) {
+          setFieldErrors((prev) => ({ ...prev, [data.flaggedField as string]: msg }));
+          if (typeof document !== "undefined") {
+            const el = document.getElementById(data.flaggedField);
+            if (el && typeof el.scrollIntoView === "function") {
+              el.scrollIntoView({ behavior: "smooth", block: "center" });
+              if (typeof (el as HTMLElement).focus === "function") {
+                (el as HTMLElement).focus({ preventScroll: true });
+              }
+            }
+          }
+        } else {
+          setError(msg);
+        }
         setSubmitting(false);
         return;
       }
@@ -241,6 +402,11 @@ export function ApplicationForm({
           ? VARIANT_CONTENT_NAME[variant as Exclude<ApplyVariant, "legacy">]
           : sprintKindLabel(kind),
       });
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.removeItem("talk:prefill:v1");
+        } catch {}
+      }
       router.push(`/thanks?kind=${kind}${isNewOffer ? `&variant=${variant}` : ""}`);
     } catch {
       setError("Network dropped. Try again — or email will@stuck.builders and we'll pick it up there.");
@@ -250,6 +416,38 @@ export function ApplicationForm({
 
   return (
     <form onSubmit={onSubmit} noValidate>
+      {prefilled && (
+        <div
+          className="field"
+          style={{
+            padding: "12px 14px",
+            background: "#FFF7E5",
+            borderLeft: "3px solid var(--chalk)",
+            borderRadius: 4,
+            marginBottom: 20,
+            fontSize: 13,
+            color: "var(--white)",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 10,
+              letterSpacing: ".12em",
+              color: "var(--chalk)",
+              fontWeight: 800,
+              textTransform: "uppercase",
+              marginBottom: 4,
+            }}
+          >
+            Prefilled from your chat with the agent
+          </div>
+          <div style={{ color: "var(--gray)", lineHeight: 1.45 }}>
+            Edit anything below — your answers, in your language. Will&apos;s already
+            got your notes for the call.
+          </div>
+        </div>
+      )}
+
       {/* Q1 — legacy Idea/Build split; hidden for the new /build-b + /build-live variants */}
       {!isNewOffer && (
         <div className="field">
@@ -324,9 +522,21 @@ export function ApplicationForm({
         <textarea
           id="projectText"
           value={projectText}
-          onChange={(e) => setProjectText(e.target.value)}
+          onChange={(e) => {
+            setProjectText(e.target.value);
+            if (fieldErrors.projectText) {
+              setFieldErrors((p) => {
+                const n = { ...p };
+                delete n.projectText;
+                return n;
+              });
+            }
+          }}
           placeholder={copy.q2Placeholder}
         />
+        {fieldErrors.projectText && (
+          <p className="form-error" style={{ marginTop: 6, fontSize: 12 }}>{fieldErrors.projectText}</p>
+        )}
       </div>
       <div className="field">
         <label htmlFor="projectUrl">{copy.q2UrlLabel}</label>
@@ -334,9 +544,21 @@ export function ApplicationForm({
           id="projectUrl"
           type="url"
           value={projectUrl}
-          onChange={(e) => setProjectUrl(e.target.value)}
+          onChange={(e) => {
+            setProjectUrl(e.target.value);
+            if (fieldErrors.projectUrl) {
+              setFieldErrors((p) => {
+                const n = { ...p };
+                delete n.projectUrl;
+                return n;
+              });
+            }
+          }}
           placeholder="https://…"
         />
+        {fieldErrors.projectUrl && (
+          <p className="form-error" style={{ marginTop: 6, fontSize: 12 }}>{fieldErrors.projectUrl}</p>
+        )}
       </div>
 
       {/* Q3 — only when idea path (legacy Greenfield) */}
@@ -349,9 +571,21 @@ export function ApplicationForm({
           <textarea
             id="aboutYou"
             value={aboutYou}
-            onChange={(e) => setAboutYou(e.target.value)}
+            onChange={(e) => {
+              setAboutYou(e.target.value);
+              if (fieldErrors.aboutYou) {
+                setFieldErrors((p) => {
+                  const n = { ...p };
+                  delete n.aboutYou;
+                  return n;
+                });
+              }
+            }}
             placeholder="What you do, what you're into, problems close to you that nobody's solved well."
           />
+          {fieldErrors.aboutYou && (
+            <p className="form-error" style={{ marginTop: 6, fontSize: 12 }}>{fieldErrors.aboutYou}</p>
+          )}
         </div>
       )}
 
@@ -362,9 +596,21 @@ export function ApplicationForm({
         <textarea
           id="stuck"
           value={stuck}
-          onChange={(e) => setStuck(e.target.value)}
+          onChange={(e) => {
+            setStuck(e.target.value);
+            if (fieldErrors.stuck) {
+              setFieldErrors((p) => {
+                const n = { ...p };
+                delete n.stuck;
+                return n;
+              });
+            }
+          }}
           placeholder={copy.q4Placeholder}
         />
+        {fieldErrors.stuck && (
+          <p className="form-error" style={{ marginTop: 6, fontSize: 12 }}>{fieldErrors.stuck}</p>
+        )}
       </div>
 
       {/* Q5 */}
@@ -374,9 +620,21 @@ export function ApplicationForm({
         <textarea
           id="shipped"
           value={shipped}
-          onChange={(e) => setShipped(e.target.value)}
+          onChange={(e) => {
+            setShipped(e.target.value);
+            if (fieldErrors.shipped) {
+              setFieldErrors((p) => {
+                const n = { ...p };
+                delete n.shipped;
+                return n;
+              });
+            }
+          }}
           placeholder={copy.q5Placeholder}
         />
+        {fieldErrors.shipped && (
+          <p className="form-error" style={{ marginTop: 6, fontSize: 12 }}>{fieldErrors.shipped}</p>
+        )}
       </div>
 
       {/* Q6 */}
@@ -386,9 +644,21 @@ export function ApplicationForm({
           id="name"
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            if (fieldErrors.name) {
+              setFieldErrors((p) => {
+                const n = { ...p };
+                delete n.name;
+                return n;
+              });
+            }
+          }}
           autoComplete="name"
         />
+        {fieldErrors.name && (
+          <p className="form-error" style={{ marginTop: 6, fontSize: 12 }}>{fieldErrors.name}</p>
+        )}
       </div>
       <div className="field">
         <label htmlFor="email">Your email</label>
@@ -396,9 +666,43 @@ export function ApplicationForm({
           id="email"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value;
+            setEmail(val);
+            if (fieldErrors.email) {
+              setFieldErrors((p) => {
+                const n = { ...p };
+                delete n.email;
+                return n;
+              });
+            }
+            const warn = emailWarning(val);
+            setFieldWarnings((p) => {
+              const n = { ...p };
+              if (warn) n.email = warn;
+              else delete n.email;
+              return n;
+            });
+          }}
+          onBlur={() => {
+            const err = validateEmail(email);
+            setFieldErrors((p) => {
+              const n = { ...p };
+              if (err && email.trim()) n.email = err;
+              else delete n.email;
+              return n;
+            });
+          }}
           autoComplete="email"
         />
+        {fieldErrors.email && (
+          <p className="form-error" style={{ marginTop: 6, fontSize: 12 }}>{fieldErrors.email}</p>
+        )}
+        {fieldWarnings.email && !fieldErrors.email && (
+          <p className="form-hint" style={{ color: "var(--chalk)", marginTop: 6, fontSize: 12 }}>
+            {fieldWarnings.email}
+          </p>
+        )}
       </div>
 
       <div className="field">
@@ -414,10 +718,31 @@ export function ApplicationForm({
           id="phone"
           type="tel"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => {
+            setPhone(e.target.value);
+            if (fieldErrors.phone) {
+              setFieldErrors((p) => {
+                const n = { ...p };
+                delete n.phone;
+                return n;
+              });
+            }
+          }}
+          onBlur={() => {
+            const err = validatePhone(phone, isNewOffer);
+            setFieldErrors((p) => {
+              const n = { ...p };
+              if (err && (phone.trim() || isNewOffer)) n.phone = err;
+              else delete n.phone;
+              return n;
+            });
+          }}
           autoComplete="tel"
           placeholder="(555) 123-4567"
         />
+        {fieldErrors.phone && (
+          <p className="form-error" style={{ marginTop: 6, fontSize: 12 }}>{fieldErrors.phone}</p>
+        )}
       </div>
 
       {/* Acknowledgment */}
@@ -426,13 +751,25 @@ export function ApplicationForm({
           <input
             type="checkbox"
             checked={ack}
-            onChange={(e) => setAck(e.target.checked)}
+            onChange={(e) => {
+              setAck(e.target.checked);
+              if (e.target.checked && fieldErrors.ack) {
+                setFieldErrors((p) => {
+                  const n = { ...p };
+                  delete n.ack;
+                  return n;
+                });
+              }
+            }}
           />
           <span>
             My business is legal, not harmful, and not predatory. I get that Will
             reads every application himself before anyone pays.
           </span>
         </label>
+        {fieldErrors.ack && (
+          <p className="form-error" style={{ marginTop: 6, fontSize: 12 }}>{fieldErrors.ack}</p>
+        )}
       </div>
 
       {error && <p className="form-error">{error}</p>}

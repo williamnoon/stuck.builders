@@ -107,6 +107,33 @@ export default async function ThanksPage({ searchParams }: { searchParams: Searc
             <span className="hand">{cfg.hand}</span>
           </div>
 
+          <section
+            style={{
+              margin: "40px auto 0",
+              maxWidth: 620,
+              padding: "22px 24px",
+              background: "var(--panel)",
+              border: "1px solid var(--line)",
+              borderLeft: "4px solid var(--green)",
+              borderRadius: 6,
+              textAlign: "left",
+            }}
+          >
+            <p className="sec-label" style={{ marginTop: 0 }}>// WHILE YOU WAIT</p>
+            <h2 className="display" style={{ fontSize: "clamp(28px, 4vw, 40px)", margin: "6px 0 12px" }}>
+              Meet the OS.
+            </h2>
+            <p style={{ fontSize: 15, color: "var(--gray)", margin: "0 0 18px" }}>
+              Same system Will&apos;s about to open with you on the call. Talk to it now — it drafts
+              your 3-system dashboard before he replies. Not a substitute for the human call, just a
+              head start.
+            </p>
+            <a href="/talk" className="btn">talk to the OS →</a>
+            <div style={{ marginTop: 12 }}>
+              <span className="hand">optional · takes ~4 min</span>
+            </div>
+          </section>
+
           {variant === "build-live" && (
             <div
               style={{
