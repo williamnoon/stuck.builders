@@ -1,3 +1,7 @@
 packages:
-  - "apps/*"
+  - "apps/web"
   - "packages/*"
+# apps/talk-to-my-ai and apps/jarvis are agent-instruction/tool folders read at
+# runtime by apps/web (via filesystem). They intentionally are NOT workspaces
+# so pnpm/turbo won't try to install their deps (e.g. `eve latest` which is a
+# private/unpublished package that breaks Vercel builds).
