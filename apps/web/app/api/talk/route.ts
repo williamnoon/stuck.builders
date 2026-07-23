@@ -346,24 +346,70 @@ export async function POST(req: Request) {
           ]),
         }),
         execute: async ({ summary, intent }) => {
-          if (!process.env.SLACK_WEBHOOK_URL) {
-            console.log(
-              `[talk] notify_will [${intent}] ${summary} (no SLACK_WEBHOOK_URL set)`,
+          const channels: string[] = [];
+          const errors: string[] = [];
+
+          // Channel 1: Slack (only if webhook set)
+          if (process.env.SLACK_WEBHOOK_URL) {
+            try {
+              await fetch(process.env.SLACK_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                  text: `Hot visitor on talk-to-my-ai [${intent}]\n${summary}`,
+                }),
+              });
+              channels.push("slack");
+            } catch (err) {
+              errors.push(`slack: ${err instanceof Error ? err.message : String(err)}`);
+            }
+          }
+
+          // Channel 2: Email fallback via Resend. Always fires as long as
+          // RESEND_API_KEY + APPLICATIONS_EMAIL are set. This ensures Will
+          // ACTUALLY gets the ping — the previous console-only path meant
+          // hot leads landed silently in prod when SLACK_WEBHOOK_URL wasn't
+          // configured.
+          const resendKey = process.env.RESEND_API_KEY;
+          const toRaw = process.env.APPLICATIONS_EMAIL;
+          const fromRaw = process.env.APPLICATIONS_FROM_EMAIL ?? "will@stuck.builders";
+          if (resendKey && toRaw) {
+            try {
+              const { Resend } = await import("resend");
+              const resend = new Resend(resendKey);
+              const to = toRaw.split(",").map((s) => s.trim()).filter(Boolean);
+              const from = fromRaw.split(",")[0]!.trim();
+              const result = await resend.emails.send({
+                from,
+                to,
+                subject: `[talk] hot visitor · ${intent}`,
+                html: `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#111;">
+  <h3 style="margin:0 0 12px;color:#C93A2B;">Hot visitor on /talk</h3>
+  <p style="margin:0 0 8px;"><strong>Intent:</strong> ${intent}</p>
+  <p style="margin:0 0 8px;"><strong>Summary:</strong> ${summary}</p>
+  <p style="margin:12px 0 0;font-size:11px;color:#888;">This is a live signal, not the full application. Full application arrives separately when the visitor submits at /apply.</p>
+</div>`,
+              });
+              if (result.error) {
+                errors.push(`email: ${JSON.stringify(result.error)}`);
+              } else {
+                channels.push("email");
+              }
+            } catch (err) {
+              errors.push(`email: ${err instanceof Error ? err.message : String(err)}`);
+            }
+          }
+
+          if (channels.length === 0) {
+            console.error(
+              `[talk] notify_will FAILED to reach Will — no channel worked. intent=${intent} summary="${summary}" errors=${errors.join(" | ")} slackSet=${!!process.env.SLACK_WEBHOOK_URL} resendSet=${!!resendKey} toSet=${!!toRaw}`,
             );
-            return { ok: true, note: "logged" };
+            return { ok: false, note: "no channel reached will", errors };
           }
-          try {
-            await fetch(process.env.SLACK_WEBHOOK_URL, {
-              method: "POST",
-              headers: { "content-type": "application/json" },
-              body: JSON.stringify({
-                text: `Hot visitor on talk-to-my-ai [${intent}]\n${summary}`,
-              }),
-            });
-          } catch (err) {
-            console.error("[talk] notify_will forward failed:", err);
-          }
-          return { ok: true };
+          console.log(
+            `[talk] notify_will delivered via ${channels.join("+")} · intent=${intent} summary="${summary}"${errors.length ? ` · partial errors: ${errors.join(" | ")}` : ""}`,
+          );
+          return { ok: true, channels };
         },
       }),
     },
